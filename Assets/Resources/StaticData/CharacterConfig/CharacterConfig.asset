@@ -12,10 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ba03ec46101c6e64fb30a03aa9d30330, type: 3}
   m_Name: CharacterConfig
   m_EditorClassIdentifier: 
-  _runningStateConfig:
-    <Speed>k__BackingField: 8
+  _groundedStateConfig:
+    _normalSpeed: 5
+    _walkStateConfig:
+      _walkSpeed: 1
+    _sprintStateConfig:
+      _sprintSpeed: 10
   _airborneStateConfig:
+    _speed: 5
     _jumpingStateConfig:
       _maxHeight: 4
       _timeToReachMaxHeight: 0.5
-    _speed: 5

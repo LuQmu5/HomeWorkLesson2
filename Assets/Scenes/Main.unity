@@ -3823,9 +3823,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 931735564}
-  - component: {fileID: 931735565}
   m_Layer: 0
-  m_Name: GroundChecker
+  m_Name: Legs
   m_TagString: Untagged
   m_Icon: {fileID: 5132851093641282708, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -3846,22 +3845,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1430978322}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &931735565
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 931735563}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a9e8b09c355679c4a85d1e1cab67f1ea, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _ground:
-    serializedVersion: 2
-    m_Bits: 64
-  _distanceToCheck: 0.1
 --- !u!4 &976698498 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4373274459020218476, guid: b2c5591240d7856458b5f9a69eb6c714,
@@ -5475,6 +5458,7 @@ GameObject:
   - component: {fileID: 1430978322}
   - component: {fileID: 1430978324}
   - component: {fileID: 1430978323}
+  - component: {fileID: 1430978325}
   m_Layer: 0
   m_Name: Character
   m_TagString: Untagged
@@ -5513,7 +5497,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _config: {fileID: 11400000, guid: 4bb48a79a488e3640859d300fcaa33c0, type: 2}
   _view: {fileID: 7515817417916516396}
-  _groundChecker: {fileID: 931735565}
+  _groundChecker: {fileID: 1430978325}
 --- !u!143 &1430978324
 CharacterController:
   m_ObjectHideFlags: 0
@@ -5540,6 +5524,22 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 1, z: 0}
+--- !u!114 &1430978325
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1430978321}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a9e8b09c355679c4a85d1e1cab67f1ea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _groundMask:
+    serializedVersion: 2
+    m_Bits: 64
+  _legs: {fileID: 931735564}
 --- !u!1001 &1449089720
 PrefabInstance:
   m_ObjectHideFlags: 0

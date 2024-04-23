@@ -4,8 +4,8 @@ using UnityEngine;
 [Serializable]
 public class AirborneStateConfig
 {
-    [SerializeField] private JumpingStateConfig _jumpingStateConfig;
     [SerializeField, Range(0, 10)] private float _speed;
+    [SerializeField] private JumpingStateConfig _jumpingStateConfig;
 
     public JumpingStateConfig JumpingStateConfig => _jumpingStateConfig;
 

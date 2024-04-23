@@ -4,18 +4,21 @@ public abstract class MovementState : IState
 {
     protected readonly IStateSwitcher StateSwitcher;
     protected readonly StateMachineData Data;
+
     private readonly Character _character;
 
     public MovementState(IStateSwitcher stateSwitcher, StateMachineData data, Character character)
     {
         StateSwitcher = stateSwitcher;
-        _character = character;
         Data = data;
+        _character = character;
     }
 
     protected PlayerInput Input => _character.Input;
     protected CharacterController CharacterController => _character.CharacterController;
     protected CharacterView View => _character.View;
+    protected bool IsShiftDown => Input.Movement.Sprint.ReadValue<float>() == 1;
+    protected bool IsAltDown => Input.Movement.Walk.ReadValue<float>() == 1;
 
     private Quaternion TurnRight => new Quaternion(0, 0, 0, 0);
     private Quaternion TurnLeft => Quaternion.Euler(0, 180, 0);

@@ -2,11 +2,12 @@ using UnityEngine;
 
 public class GroundChecker : MonoBehaviour
 {
-    [SerializeField] private LayerMask _ground;
+    private const float LegsRadius = 0.1f;
 
-    [SerializeField, Range(0.01f, 1)] private float _distanceToCheck;
+    [SerializeField] private LayerMask _groundMask;
+    [SerializeField] private Transform _legs;
 
-    public bool IsTouches { get; private set; }
+    public bool OnGround { get; private set; }
 
-    private void Update() => IsTouches = Physics.CheckSphere(transform.position, _distanceToCheck, _ground);
+    private void FixedUpdate() => OnGround = Physics.CheckSphere(_legs.position, LegsRadius, _groundMask);
 }

@@ -19,17 +19,17 @@ public class Character : MonoBehaviour
 
     private void Awake()
     {
-        _view.Initialize();
-        _input = new PlayerInput();
         _characterController = GetComponent<CharacterController>();
+        _view.Initialize();
+
+        _input = new PlayerInput();
         _stateMachine = new CharacterStateMachine(this);
     }
 
     private void Update()
     {
-        _stateMachine.HandleInput();
-
         _stateMachine.Update();        
+        _stateMachine.HandleInput();
     }
 
     private void OnEnable() => _input.Enable();

@@ -13,7 +13,7 @@ public class StateMachineData
         get => _xInput;
         set
         {
-            if(value < -1 || value > 1)
+            if (value < -1 || value > 1)
                 throw new ArgumentOutOfRangeException(nameof(value));
 
             _xInput = value;
@@ -25,7 +25,7 @@ public class StateMachineData
         get => _speed;
         set
         {
-            if(value < 0)
+            if (value < 0)
                 throw new ArgumentOutOfRangeException(nameof(value));
 
             _speed = value;

@@ -1,11 +1,11 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "CharacterConfig", menuName = "Configs/CharacterConfig")]
+[CreateAssetMenu(fileName = "CharacterConfig", menuName = "Configs/CharacterConfig", order = 54)]
 public class CharacterConfig : ScriptableObject
 {
-    [SerializeField] private RunningStateConfig _runningStateConfig;
+    [SerializeField] private GroundedStateConfig _groundedStateConfig;
     [SerializeField] private AirborneStateConfig _airborneStateConfig;
 
-    public RunningStateConfig RunningStateConfig => _runningStateConfig;
+    public GroundedStateConfig GroundedStateConfig => _groundedStateConfig;
     public AirborneStateConfig AirborneStateConfig => _airborneStateConfig;
 }

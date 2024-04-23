@@ -11,3 +11,4 @@ public class JumpingStateConfig
     public float MaxHeight => _maxHeight;
     public float TimeToReachMaxHeight => _timeToReachMaxHeight;
 }
+

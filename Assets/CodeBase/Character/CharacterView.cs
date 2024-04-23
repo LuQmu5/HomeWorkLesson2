@@ -3,13 +3,17 @@ using UnityEngine;
 [RequireComponent(typeof(Animator))]
 public class CharacterView : MonoBehaviour
 {
-    private const string IsIdling = "IsIdling";
-    private const string IsRunning = "IsRunning";
-    private const string IsGrounded = "IsGrounded";
-    private const string IsJumping = "IsJumping";
-    private const string IsFalling = "IsFalling";
-    private const string IsAirborne = "IsAirborne";
-    private const string IsMovement = "IsMovement";
+    private const string IsGrounded = nameof(IsGrounded);
+    private const string IsIdling = nameof(IsIdling);
+    private const string IsWalking = nameof(IsWalking);
+    private const string IsRunning = nameof(IsRunning);
+    private const string IsSprinting = nameof(IsSprinting);
+
+    private const string IsJumping = nameof(IsJumping);
+    private const string IsFalling = nameof(IsFalling);
+
+    private const string IsMovement = nameof(IsMovement);
+    private const string IsAirborne = nameof(IsAirborne);
 
     private Animator _animator;
 
@@ -35,4 +39,10 @@ public class CharacterView : MonoBehaviour
 
     public void StartMovement() => _animator.SetBool(IsMovement, true);
     public void StopMovement() => _animator.SetBool(IsMovement, false);
+
+    public void StartWalking() => _animator.SetBool(IsWalking, true);
+    public void StopWalking() => _animator.SetBool(IsWalking, false);
+
+    public void StartSprinting() => _animator.SetBool(IsSprinting, true);
+    public void StopSprinting() => _animator.SetBool(IsSprinting, false);
 }

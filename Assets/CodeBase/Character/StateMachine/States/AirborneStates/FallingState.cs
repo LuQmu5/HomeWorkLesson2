@@ -23,7 +23,7 @@ public class FallingState : AirborneState
     {
         base.Update();
 
-        if (_groundChecker.IsTouches)
+        if (_groundChecker.OnGround)
         {
             Data.YVelocity = 0;
 

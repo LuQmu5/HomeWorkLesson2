@@ -25,7 +25,7 @@ public class GroundedState : MovementState
     {
         base.Update();
 
-        if (_groundChecker.IsTouches)
+        if (_groundChecker.OnGround)
             return;
 
         StateSwitcher.SwitchState<FallingState>();
