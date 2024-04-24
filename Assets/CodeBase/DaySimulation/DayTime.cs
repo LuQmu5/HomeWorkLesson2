@@ -3,8 +3,11 @@
 [Serializable]
 public class DayTime
 {
-    public int Hour { get => Hour; set => ValidateHour(value); }
-    public int Minute { get => Minute; set => ValidateMinute(value); }
+    private int _hour;
+    private int _minute;
+
+    public int Hour { get => _hour; set => ValidateHour(value); }
+    public int Minute { get => _minute; set => ValidateMinute(value); }
 
     public DayTime(int hour, int minute)
     {
@@ -18,19 +21,19 @@ public class DayTime
         Minute = minute;
     }
 
-    private static int ValidateHour(int hour)
+    private void ValidateHour(int hour)
     {
         if (hour < Constants.MinHour || hour > Constants.MaxHour)
             throw new ArgumentOutOfRangeException($"{nameof(hour)} must be in interval between {Constants.MinHour} and {Constants.MaxHour}");
 
-        return hour;
+        _hour = hour;
     }
 
-    private static int ValidateMinute(int minute)
+    private void ValidateMinute(int minute)
     {
         if (minute < Constants.MinMinute || minute > Constants.MaxMinute)
             throw new ArgumentOutOfRangeException($"{nameof(minute)} must be in interval between {Constants.MinMinute} and {Constants.MaxMinute}");
 
-        return minute;
+        _minute = minute;
     }
 }
