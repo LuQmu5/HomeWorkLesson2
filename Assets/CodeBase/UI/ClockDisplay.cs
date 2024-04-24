@@ -11,11 +11,11 @@ public class ClockDisplay : MonoBehaviour
 
     private DayTimeSimulator _dayTimeSimulator;
 
-    public void Init(DayTimeSimulator dayTimeSimulator, int startHour, int startMinute, DayStates startDayState)
+    public void Init(DayTimeSimulator dayTimeSimulator, DayTime startTime, DayStates startDayState)
     {
         _dayTimeSimulator = dayTimeSimulator;
 
-        _timeText.text = GetConvertedTime(startHour, startMinute);
+        _timeText.text = GetConvertedTime(startTime.Hour, startTime.Minute);
         _dayStateText.text = startDayState.ToString();
 
         _dayTimeSimulator.TimeChanged += OnTimeChanged;
@@ -28,9 +28,9 @@ public class ClockDisplay : MonoBehaviour
         _dayTimeSimulator.DayStateChanged -= OnDayStateChanged;
     }
 
-    private void OnTimeChanged(int hour, int minute)
+    private void OnTimeChanged(DayTime dayTime)
     {
-        _timeText.text = GetConvertedTime(hour, minute);
+        _timeText.text = GetConvertedTime(dayTime.Hour, dayTime.Minute);
     }
 
     private void OnDayStateChanged(DayStates newState)

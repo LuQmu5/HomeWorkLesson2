@@ -9,7 +9,7 @@ public class DayTimeSimulator
     private DayTime _currentTime;
     private DayStates _currentDayState;
 
-    public event Action<int, int> TimeChanged;
+    public event Action<DayTime> TimeChanged;
     public event Action<DayStates> DayStateChanged;
 
     public DayTimeSimulator(ICoroutineRunner coroutineRunner, DayTime startTime, DayStates startDayState, float realSecondsInMinute)
@@ -46,18 +46,18 @@ public class DayTimeSimulator
                     }
 
                     _currentTime.Minute++;
-                    TimeChanged?.Invoke(_currentTime.Hour, _currentTime.Minute);
+                    TimeChanged?.Invoke(_currentTime);
                 }
 
                 _currentTime.Minute = Constants.MinMinute;
                 _currentTime.Hour++;
-                TimeChanged?.Invoke(_currentTime.Hour, _currentTime.Minute);
+                TimeChanged?.Invoke(_currentTime);
 
                 CheckForSwitchDayState();
             }
 
             _currentTime.Hour = Constants.MinHour;
-            TimeChanged?.Invoke(_currentTime.Hour, _currentTime.Minute);
+            TimeChanged?.Invoke(_currentTime);
         }
     }
 

@@ -30,7 +30,7 @@ public class CitizenBehaviour : MonoBehaviour
         print(_currentAction);
     }
 
-    private void OnTimeChanged(int hour, int minute)
+    private void OnTimeChanged(DayTime dayTime)
     {
     }
 }

@@ -2,6 +2,7 @@
 
 public class GameBootstrapper : MonoBehaviour, ICoroutineRunner
 {
+    [SerializeField] private CitizenBehaviour[] _citizens;
     [SerializeField] private ClockDisplay _clockDisplay;
 
     private void Awake()
@@ -11,6 +12,12 @@ public class GameBootstrapper : MonoBehaviour, ICoroutineRunner
         DayStates startDayState = DayStates.Night;
 
         DayTimeSimulator dayTimeSimulator = new DayTimeSimulator(this, startDayTime, startDayState, realSecondsInMinute);
-        _clockDisplay.Init(dayTimeSimulator, startDayTime.Hour, startDayTime.Minute, startDayState);
+
+        foreach (var citizen in _citizens)
+        {
+            citizen.Init(dayTimeSimulator);
+        }
+
+        _clockDisplay.Init(dayTimeSimulator, startDayTime, startDayState);
     }
 }
