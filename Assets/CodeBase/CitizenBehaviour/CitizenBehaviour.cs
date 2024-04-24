@@ -18,6 +18,11 @@ public class CitizenBehaviour : MonoBehaviour
         _sleepTimeInterval = new TimeInterval(new DayTime(22, 0), new DayTime(10, 0));
 
         _dayTimeSimulator.TimeChanged += OnTimeChanged;
+
+        DayTime a = new DayTime(10, 30);
+        DayTime b = new DayTime(10, 30);
+        print(a == b);
+        print(a != b);
     }
 
     private void OnDestroy()
@@ -32,6 +37,7 @@ public class CitizenBehaviour : MonoBehaviour
 
     private void OnTimeChanged(DayTime dayTime)
     {
+
     }
 }
 
