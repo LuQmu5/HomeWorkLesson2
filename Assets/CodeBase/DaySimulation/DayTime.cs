@@ -37,6 +37,19 @@ public struct DayTime
         _minute = minute;
     }
 
+    public override bool Equals(object obj)
+    {
+        return obj is DayTime time &&
+               _hour == time._hour &&
+               _minute == time._minute &&
+               Hour == time.Hour &&
+               Minute == time.Minute;
+    }
+
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(_hour, _minute, Hour, Minute);
+    }
 
     public static bool operator ==(DayTime dayTime1, DayTime dayTime2)
     {
@@ -46,17 +59,5 @@ public struct DayTime
     public static bool operator !=(DayTime dayTime1, DayTime dayTime2)
     {
         return dayTime1.Equals(dayTime2) == false;
-    }
-
-    public override bool Equals(object anotherDayTime)
-    {
-        DayTime dayTime2 = ((DayTime)anotherDayTime);
-
-        return Hour == dayTime2.Hour && Minute == dayTime2.Minute;
-    }
-
-    public override int GetHashCode()
-    {
-        return base.GetHashCode();
     }
 }
