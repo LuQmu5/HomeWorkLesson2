@@ -1,7 +1,7 @@
 ﻿using System;
 
 [Serializable]
-public class DayTime
+public struct DayTime
 {
     private int _hour;
     private int _minute;
@@ -11,28 +11,28 @@ public class DayTime
 
     public DayTime(int hour, int minute)
     {
-        Hour = hour;
-        Minute = minute;
-    }
+        if (hour < Constants.MinHour || hour > Constants.MaxHour)
+            throw new ArgumentOutOfRangeException($"{nameof(hour)} must be in interval between {Constants.MinHour} and {Constants.MaxHour}");
 
-    public void SetTime(int hour, int minute)
-    {
-        Hour = hour; 
-        Minute = minute;
+        if (minute < Constants.MinHour || minute > Constants.MaxMinute)
+            throw new ArgumentOutOfRangeException($"{nameof(minute)} must be in interval between {Constants.MinMinute}  and  {Constants.MaxMinute}");
+
+        _hour = hour;
+        _minute = minute;
     }
 
     private void ValidateHour(int hour)
     {
         if (hour < Constants.MinHour || hour > Constants.MaxHour)
-            throw new ArgumentOutOfRangeException($"{nameof(hour)} must be in interval between {Constants.MinHour} and {Constants.MaxHour}");
+            throw new ArgumentOutOfRangeException($"{nameof(hour)} must be in interval between {Constants.MinHour}  and  {Constants.MaxHour}");
 
         _hour = hour;
     }
 
     private void ValidateMinute(int minute)
     {
-        if (minute < Constants.MinMinute || minute > Constants.MaxMinute)
-            throw new ArgumentOutOfRangeException($"{nameof(minute)} must be in interval between {Constants.MinMinute} and {Constants.MaxMinute}");
+        if (minute < Constants.MinHour || minute > Constants.MaxMinute)
+            throw new ArgumentOutOfRangeException($"{nameof(minute)} must be in interval between {Constants.MinMinute}  and  {Constants.MaxMinute}");
 
         _minute = minute;
     }

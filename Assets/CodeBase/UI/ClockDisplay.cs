@@ -9,19 +9,23 @@ public class ClockDisplay : MonoBehaviour
     [SerializeField] private TMP_Text _timeText;
     [SerializeField] private TMP_Text _dayStateText;
 
-    public void Init(int startHour, int startMinute)
-    {
-        _timeText.text = GetConvertedTime(startHour, startMinute);
-        _dayStateText.text = DayTimeSimulator.CurrentDayState.ToString();
+    private DayTimeSimulator _dayTimeSimulator;
 
-        DayTimeSimulator.TimeChanged += OnTimeChanged;
-        DayTimeSimulator.DayStateChanged += OnDayStateChanged;
+    public void Init(DayTimeSimulator dayTimeSimulator, int startHour, int startMinute, DayStates startDayState)
+    {
+        _dayTimeSimulator = dayTimeSimulator;
+
+        _timeText.text = GetConvertedTime(startHour, startMinute);
+        _dayStateText.text = startDayState.ToString();
+
+        _dayTimeSimulator.TimeChanged += OnTimeChanged;
+        _dayTimeSimulator.DayStateChanged += OnDayStateChanged;
     }
 
     private void OnDestroy()
     {
-        DayTimeSimulator.TimeChanged -= OnTimeChanged;
-        DayTimeSimulator.DayStateChanged -= OnDayStateChanged;
+        _dayTimeSimulator.TimeChanged -= OnTimeChanged;
+        _dayTimeSimulator.DayStateChanged -= OnDayStateChanged;
     }
 
     private void OnTimeChanged(int hour, int minute)

@@ -11,6 +11,6 @@ public class GameBootstrapper : MonoBehaviour, ICoroutineRunner
         DayStates startDayState = DayStates.Night;
 
         DayTimeSimulator dayTimeSimulator = new DayTimeSimulator(this, startDayTime, startDayState, realSecondsInMinute);
-        _clockDisplay.Init(startDayTime.Hour, startDayTime.Minute);
+        _clockDisplay.Init(dayTimeSimulator, startDayTime.Hour, startDayTime.Minute, startDayState);
     }
 }

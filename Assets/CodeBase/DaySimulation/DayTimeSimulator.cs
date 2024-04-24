@@ -6,12 +6,11 @@ using UnityEngine;
 public class DayTimeSimulator
 {
     private Dictionary<int, DayStates> _dayStatesStartsMap;
+    private DayTime _currentTime;
+    private DayStates _currentDayState;
 
-    public static DayTime CurrentTime { get; private set; }
-    public static DayStates CurrentDayState { get; private set; }
-
-    public static event Action<int, int> TimeChanged;
-    public static event Action<DayStates> DayStateChanged;
+    public event Action<int, int> TimeChanged;
+    public event Action<DayStates> DayStateChanged;
 
     public DayTimeSimulator(ICoroutineRunner coroutineRunner, DayTime startTime, DayStates startDayState, float realSecondsInMinute)
     {
@@ -23,8 +22,8 @@ public class DayTimeSimulator
             [Constants.NightStartHour] = DayStates.Night
         };
 
-        CurrentTime = startTime;
-        CurrentDayState = startDayState;
+        _currentTime = startTime;
+        _currentDayState = startDayState;
 
         coroutineRunner.StartCoroutine(Simulating(realSecondsInMinute));
     }
@@ -33,9 +32,9 @@ public class DayTimeSimulator
     {
         while (true)
         {
-            while (CurrentTime.Hour < Constants.MaxHour)
+            while (_currentTime.Hour < Constants.MaxHour)
             {
-                while (CurrentTime.Minute < Constants.MaxMinute)
+                while (_currentTime.Minute < Constants.MaxMinute)
                 {
                     float delayTime = realSecondsInMinute;
 
@@ -46,29 +45,29 @@ public class DayTimeSimulator
                         yield return null;
                     }
 
-                    CurrentTime.Minute++;
-                    TimeChanged?.Invoke(CurrentTime.Hour, CurrentTime.Minute);
+                    _currentTime.Minute++;
+                    TimeChanged?.Invoke(_currentTime.Hour, _currentTime.Minute);
                 }
 
-                CurrentTime.Minute = Constants.MinMinute;
-                CurrentTime.Hour++;
-                TimeChanged?.Invoke(CurrentTime.Hour, CurrentTime.Minute);
+                _currentTime.Minute = Constants.MinMinute;
+                _currentTime.Hour++;
+                TimeChanged?.Invoke(_currentTime.Hour, _currentTime.Minute);
 
                 CheckForSwitchDayState();
             }
 
-            CurrentTime.Hour = Constants.MinHour;
-            TimeChanged?.Invoke(CurrentTime.Hour, CurrentTime.Minute);
+            _currentTime.Hour = Constants.MinHour;
+            TimeChanged?.Invoke(_currentTime.Hour, _currentTime.Minute);
         }
     }
 
     private void CheckForSwitchDayState()
     {
-        if (_dayStatesStartsMap.ContainsKey(CurrentTime.Hour))
+        if (_dayStatesStartsMap.ContainsKey(_currentTime.Hour))
         {
-            CurrentDayState = _dayStatesStartsMap[CurrentTime.Hour];
+            _currentDayState = _dayStatesStartsMap[_currentTime.Hour];
 
-            DayStateChanged?.Invoke(CurrentDayState);
+            DayStateChanged?.Invoke(_currentDayState);
         }
     }
 }
