@@ -5,17 +5,14 @@ using UnityEngine;
 public class CitizenBehaviour : MonoBehaviour
 {
     private DayTimeSimulator _dayTimeSimulator;
+    private Dictionary<DayTime, CitizenBehaviours> _dayRoutineMap;
+    private CitizenBehaviours _currentBehaviour;
 
-    private TimeInterval _doSomeActionTimeInterval;
-    private TimeInterval _sleepTimeInterval;
-    private string _currentAction;
-
-    public void Init(DayTimeSimulator dayTimeSimulator)
+    public void Init(DayTimeSimulator dayTimeSimulator, Dictionary<DayTime, CitizenBehaviours> dayRoutineMap, CitizenBehaviours startBehaviour)
     {
         _dayTimeSimulator = dayTimeSimulator;
-
-        _doSomeActionTimeInterval = new TimeInterval(new DayTime(10, 0), new DayTime(22, 0));
-        _sleepTimeInterval = new TimeInterval(new DayTime(22, 0), new DayTime(10, 0));
+        _dayRoutineMap = dayRoutineMap;
+        _currentBehaviour = startBehaviour;
 
         _dayTimeSimulator.TimeChanged += OnTimeChanged;
     }
@@ -27,23 +24,14 @@ public class CitizenBehaviour : MonoBehaviour
 
     private void Update()
     {
-        print(_currentAction);
+        print("I'm " + _currentBehaviour);
     }
 
     private void OnTimeChanged(DayTime dayTime)
     {
-
+        if (_dayRoutineMap.ContainsKey(dayTime))
+        {
+            _currentBehaviour = _dayRoutineMap[dayTime];
+        }
     }
-}
-
-public class DayRoutine
-{
-    private Dictionary<CitizenBehaviours, TimeInterval> _dayRoutineMap;
-}
-
-public enum CitizenBehaviours
-{
-    Sleep,
-    Walking,
-    Working
 }
