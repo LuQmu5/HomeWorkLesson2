@@ -22,7 +22,7 @@ public class CitizenWorkState : IState
         }
         else
         {
-            _coroutineRunner.StartCoroutine(Working());
+            Work();
         }
     }
 
