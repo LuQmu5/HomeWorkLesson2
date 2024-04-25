@@ -1,42 +1,57 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
-public class Citizen : MonoBehaviour
+[RequireComponent(typeof(NavMeshAgent))]
+public class Citizen : MonoBehaviour, ICoroutineRunner
 {
-    [SerializeField] private CitizenTypes _type;
-    [SerializeField] private CitizenHome _home;
-    [SerializeField] private CitizenWork _work;
+    [SerializeField] private Transform _bed;
+    [SerializeField] private Transform _workingPlace;
 
-    private CitizenBehaviourSwitcher _behaviourSwitcher;
-    private CitizenBehaviour _currentBehaviour;
+    private CitizenStateMachine _stateMachine;
+    private Dictionary<DayTime, CitizenBehaviour> _dayRoutine;
+    private DayTimeSimulator _dayTimeSimulator;
 
-    public CitizenTypes Type => _type;
+    public Transform Bed => _bed;
+    public Transform WorkingPlace => _workingPlace;
+    public NavMeshAgent Mover { get; private set; }
 
-    public event Action<CitizenBehaviour> BehaviourChanged;
-
-    public void Init(CitizenBehaviour startBehaviour)
+    public void Init(CitizenBehaviour startBehaviour, Dictionary<DayTime, CitizenBehaviour> dayRoutine, DayTimeSimulator dayTimeSimulator)
     {
-        _behaviourSwitcher = new CitizenBehaviourSwitcher(startBehaviour);
-        _currentBehaviour = startBehaviour;
+        Mover = GetComponent<NavMeshAgent>();   
 
-        BehaviourChanged?.Invoke(_currentBehaviour);
+        _stateMachine = new CitizenStateMachine(this);
+        _stateMachine.SwitchStateForBehaviour(startBehaviour);
+
+        _dayRoutine = dayRoutine;
+        _dayTimeSimulator = dayTimeSimulator;
+        _dayTimeSimulator.TimeChanged += OnTimeChanged;
+    }
+
+    private void OnDestroy()
+    {
+        _dayTimeSimulator.TimeChanged -= OnTimeChanged;
     }
 
     private void Update()
     {
-        if (_behaviourSwitcher.CurrentBehaviour.IsActionCompleted)
-        {
-            if (_behaviourSwitcher.TryChangeBehaviour(_currentBehaviour.BehaviourAfterCompleteAction))
-            {
-                _currentBehaviour = _currentBehaviour.BehaviourAfterCompleteAction;
-
-                BehaviourChanged?.Invoke(_currentBehaviour);
-            }
-        }
+        _stateMachine.Update();
     }
 
-    public void ChangeBehaviour(CitizenBehaviour newBehaviour)
+    public bool TryChangeBehaviour(CitizenBehaviour newBehaviour)
     {
-        _behaviourSwitcher.TryChangeBehaviour(newBehaviour);
+        if (newBehaviour == null)
+            return false;
+
+        _stateMachine.SwitchStateForBehaviour(newBehaviour);
+
+        return false;
+    }
+
+    private void OnTimeChanged(DayTime currentTime)
+    {
+        if (_dayRoutine.ContainsKey(currentTime))
+            TryChangeBehaviour(_dayRoutine[currentTime]);
     }
 }

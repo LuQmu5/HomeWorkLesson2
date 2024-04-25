@@ -1,39 +1,28 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using UnityEngine;
-
 public class CitizenStateMachine
 {
-    public CitizenStateMachine()
-    {
-        
-    }
-}
-
-public class MoveState : IUpdatableState
-{
     private Citizen _citizen;
-    private Vector3 _movePoint;
+    private IState _currentState;
 
-    public MoveState(Citizen citizen, Vector3 movePoint)
+    public CitizenStateMachine(Citizen citizen)
     {
         _citizen = citizen;
-        _movePoint = movePoint;
     }
 
-    public void Enter()
+    public void SwitchStateForBehaviour(CitizenBehaviour newBehaviour)
     {
-        _citizen.Agent.SetDestination(_movePoint);
+        if (newBehaviour is CitizenSleepBehaviour)
+        {
+            _currentState?.Exit();
+            _currentState = new CitizenSleepState(_citizen);
+            _currentState.Enter();
+        }
+        else if (newBehaviour is CitizenWorkBehaviour)
+        {
+            _currentState?.Exit();
+            _currentState = new CitizenWorkState(_citizen);
+            _currentState.Enter();
+        }
     }
 
-    public void Exit()
-    {
-        _citizen.Agent.isStopped = true;
-    }
-
-    public void Update()
-    {
-        
-    }
+    public void Update() => _currentState?.Update();
 }
