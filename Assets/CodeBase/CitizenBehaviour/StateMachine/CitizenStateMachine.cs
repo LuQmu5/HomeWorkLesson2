@@ -6,11 +6,11 @@ public class CitizenStateMachine: IStateSwitcher
     private List<IState> _states;
     private IState _currentState;
 
-    public CitizenStateMachine()
+    public CitizenStateMachine(CitizenBehaviour citizenBehaviour)
     {
         _states = new List<IState>()
         {
-
+            new WalkState(this, citizenBehaviour)
         };
 
         _currentState = _states[0];
@@ -24,5 +24,11 @@ public class CitizenStateMachine: IStateSwitcher
         _currentState?.Exit();
         _currentState = state;
         _currentState?.Enter();
+    }
+
+    public void Update()
+    {
+        if (_currentState is IUpdatableState updatableState)
+            updatableState.Update();
     }
 }
