@@ -9,6 +9,9 @@ public class DayTimeSimulator
     private DayTime _currentTime;
     private DayStates _currentDayState;
 
+    public DayTime CurrentTime => _currentTime;
+    public DayStates CurrentDayState => _currentDayState;
+
     public event Action<DayTime> TimeChanged;
     public event Action<DayStates> DayStateChanged;
 
