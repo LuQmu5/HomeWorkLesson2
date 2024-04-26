@@ -1,5 +1,3 @@
-﻿using UnityEngine;
-
-public abstract class CitizenBehaviour
+﻿public abstract class CitizenBehaviour
 {
 }

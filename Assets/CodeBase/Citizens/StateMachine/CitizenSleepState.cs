@@ -7,6 +7,7 @@ public class CitizenSleepState : IState
 
     private Citizen _citizen;
     private ICoroutineRunner _coroutineRunner;
+    private Coroutine _currentCoroutine;
 
     public CitizenSleepState(Citizen citizen)
     {
@@ -18,7 +19,7 @@ public class CitizenSleepState : IState
     {
         if (GetDistanceToBed() > MinDistanceToLayInBed)
         {
-            _coroutineRunner.StartCoroutine(GoingToBed());
+            _currentCoroutine = _coroutineRunner.StartCoroutine(GoingToBed());
         }
         else
         {
@@ -30,6 +31,9 @@ public class CitizenSleepState : IState
 
     public void Exit()
     {
+        if (_currentCoroutine != null)
+            _coroutineRunner.StopCoroutine(_currentCoroutine);
+
         Debug.Log("Ах, встаю встаю...");
     }
 

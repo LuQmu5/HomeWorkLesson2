@@ -7,6 +7,7 @@ public class CitizenWorkState : IState
 
     private Citizen _citizen;
     private ICoroutineRunner _coroutineRunner;
+    private Coroutine _currentCoroutine;
 
     public CitizenWorkState(Citizen citizen)
     {
@@ -18,7 +19,7 @@ public class CitizenWorkState : IState
     {
         if (GetDistanceToWorkingPlace() > MinDistanceToWorkingPlace)
         {
-            _coroutineRunner.StartCoroutine(GoingToWork());
+            _currentCoroutine = _coroutineRunner.StartCoroutine(GoingToWork());
         }
         else
         {
@@ -30,7 +31,10 @@ public class CitizenWorkState : IState
 
     public void Exit()
     {
-        Debug.Log("Ура. Домой!");
+        if (_currentCoroutine != null)
+            _coroutineRunner.StopCoroutine(_currentCoroutine);
+
+        Debug.Log("Прекращаю работать...");
     }
 
     private IEnumerator GoingToWork()

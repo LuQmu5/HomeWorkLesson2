@@ -1,3 +1,5 @@
+using System;
+
 public class CitizenStateMachine
 {
     private Citizen _citizen;
@@ -21,6 +23,16 @@ public class CitizenStateMachine
             _currentState?.Exit();
             _currentState = new CitizenWorkState(_citizen);
             _currentState.Enter();
+        }
+        else if (newBehaviour is CitizenTradingBehaviour)
+        {
+            _currentState?.Exit();
+            _currentState = new CitizenTradingState(_citizen);
+            _currentState.Enter();
+        }
+        else
+        {
+            throw new ArgumentException($"No state for this behaviour");
         }
     }
 

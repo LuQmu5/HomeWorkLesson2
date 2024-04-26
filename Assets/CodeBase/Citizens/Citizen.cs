@@ -12,7 +12,9 @@ public class Citizen : MonoBehaviour, ICoroutineRunner
     private CitizenStateMachine _stateMachine;
     private Dictionary<DayTime, CitizenBehaviour> _dayRoutine;
     private DayTimeSimulator _dayTimeSimulator;
+    private CitizenBehaviour _currentDayRoutineBehaviour;
 
+    public bool IsTrading { get; private set; } = false;
     public Transform Bed => _bed;
     public Transform WorkingPlace => _workingPlace;
     public NavMeshAgent Mover { get; private set; }
@@ -23,6 +25,7 @@ public class Citizen : MonoBehaviour, ICoroutineRunner
 
         _stateMachine = new CitizenStateMachine(this);
         _stateMachine.SwitchStateForBehaviour(startBehaviour);
+        _currentDayRoutineBehaviour = startBehaviour;
 
         _dayRoutine = dayRoutine;
         _dayTimeSimulator = dayTimeSimulator;
@@ -39,6 +42,16 @@ public class Citizen : MonoBehaviour, ICoroutineRunner
         _stateMachine.Update();
     }
 
+    private void OnMouseDown()
+    {
+        IsTrading = !IsTrading;
+
+        if (IsTrading)
+            TryChangeBehaviour(new CitizenTradingBehaviour());
+        else
+            TryChangeBehaviour(_currentDayRoutineBehaviour);
+    }
+
     public bool TryChangeBehaviour(CitizenBehaviour newBehaviour)
     {
         if (newBehaviour == null)
@@ -52,6 +65,11 @@ public class Citizen : MonoBehaviour, ICoroutineRunner
     private void OnTimeChanged(DayTime currentTime)
     {
         if (_dayRoutine.ContainsKey(currentTime))
-            TryChangeBehaviour(_dayRoutine[currentTime]);
+        {
+            CitizenBehaviour newBehaviour = _dayRoutine[currentTime];
+
+            if (TryChangeBehaviour(newBehaviour))
+                _currentDayRoutineBehaviour = newBehaviour;
+        }
     }
 }
