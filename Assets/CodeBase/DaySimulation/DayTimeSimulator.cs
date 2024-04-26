@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class DayTimeSimulator
@@ -9,35 +10,32 @@ public class DayTimeSimulator
     private DayTime _currentTime;
     private DayStates _currentDayState;
 
-    public DayTime CurrentTime => _currentTime;
-    public DayStates CurrentDayState => _currentDayState;
-
     public event Action<DayTime> TimeChanged;
     public event Action<DayStates> DayStateChanged;
 
-    public DayTimeSimulator(ICoroutineRunner coroutineRunner, DayTime startTime, DayStates startDayState, float realSecondsInMinute)
+    public DayTimeSimulator(ICoroutineRunner coroutineRunner, DayTimeConfig dayTimeConfig)
     {
         _dayStatesStartsMap = new Dictionary<int, DayStates>()
         {
-            [GlobalConstants.MorningStartHour] = DayStates.Morning,
-            [GlobalConstants.DayStartHour] = DayStates.Day,
-            [GlobalConstants.EveningStartHour] = DayStates.Evening,
-            [GlobalConstants.NightStartHour] = DayStates.Night
+            [dayTimeConfig.DayStatesTimeConfig.MorningStartHour] = DayStates.Morning,
+            [dayTimeConfig.DayStatesTimeConfig.DayStartHour] = DayStates.Day,
+            [dayTimeConfig.DayStatesTimeConfig.EveningStartHour] = DayStates.Evening,
+            [dayTimeConfig.DayStatesTimeConfig.NightStartHour] = DayStates.Night
         };
 
-        _currentTime = startTime;
-        _currentDayState = startDayState;
+        _currentDayState = dayTimeConfig.StartDayState;
+        _currentTime = dayTimeConfig.StartDayTime;
 
-        coroutineRunner.StartCoroutine(Simulating(realSecondsInMinute));
+        coroutineRunner.StartCoroutine(Simulating(dayTimeConfig.DaySpeedTimeConfig.RealSecondsInOneMinute));
     }
 
     private IEnumerator Simulating(float realSecondsInMinute)
     {
         while (true)
         {
-            while (_currentTime.Hour < GlobalConstants.MaxHour)
+            while (_currentTime.Hour < TimeConstants.MaxHour)
             {
-                while (_currentTime.Minute < GlobalConstants.MaxMinute)
+                while (_currentTime.Minute < TimeConstants.MaxMinute)
                 {
                     float delayTime = realSecondsInMinute;
 
@@ -52,14 +50,14 @@ public class DayTimeSimulator
                     TimeChanged?.Invoke(_currentTime);
                 }
 
-                _currentTime.Minute = GlobalConstants.MinMinute;
+                _currentTime.Minute = TimeConstants.MinMinute;
                 _currentTime.Hour++;
                 TimeChanged?.Invoke(_currentTime);
 
                 CheckForSwitchDayState();
             }
 
-            _currentTime.Hour = GlobalConstants.MinHour;
+            _currentTime.Hour = TimeConstants.MinHour;
             TimeChanged?.Invoke(_currentTime);
         }
     }

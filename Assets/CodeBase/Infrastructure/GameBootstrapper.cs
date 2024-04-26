@@ -3,6 +3,8 @@ using UnityEngine;
 
 public class GameBootstrapper : MonoBehaviour, ICoroutineRunner
 {
+    private const string DayTimeConfigPath = "StaticData/DayTimeConfigs/DayTimeConfig";
+
     [SerializeField] private Citizen[] _citizens;
     [SerializeField] private ClockDisplay _clockDisplay;
 
@@ -10,19 +12,21 @@ public class GameBootstrapper : MonoBehaviour, ICoroutineRunner
 
     private void Awake()
     {
-        InitDayTimeSimulator();
+        DayTimeConfig dayTimeConfig = Resources.Load<DayTimeConfig>(DayTimeConfigPath);
+
+        InitDayTimeSimulator(dayTimeConfig);
         InitCitizens();
-        InitUI();
+        InitUI(dayTimeConfig);
     }
 
-    private void InitUI()
+    private void InitUI(DayTimeConfig dayTimeConfig)
     {
-        _clockDisplay.Init(_dayTimeSimulator, _dayTimeSimulator.CurrentTime, _dayTimeSimulator.CurrentDayState);
+        _clockDisplay.Init(_dayTimeSimulator, dayTimeConfig);
     }
 
     private void InitCitizens()
     {
-        Dictionary<DayTime, CitizenBehaviour> dayRoutine = new Dictionary<DayTime, CitizenBehaviour>()
+        Dictionary<DayTime, CitizenBehaviour> workerDayRoutine = new Dictionary<DayTime, CitizenBehaviour>()
         {
             [new DayTime(8, 0)] = new CitizenWorkBehaviour(),
             [new DayTime(20, 0)] = new CitizenSleepBehaviour(),
@@ -31,15 +35,12 @@ public class GameBootstrapper : MonoBehaviour, ICoroutineRunner
         foreach (var citizen in _citizens)
         {
             CitizenSleepBehaviour startBehaviour = new CitizenSleepBehaviour();
-            citizen.Init(startBehaviour, dayRoutine, _dayTimeSimulator);
+            citizen.Init(startBehaviour, workerDayRoutine, _dayTimeSimulator);
         }
     }
 
-    private void InitDayTimeSimulator()
+    private void InitDayTimeSimulator(DayTimeConfig dayTimeConfig)
     {
-        float realSecondsInMinute = 0.1f;
-        DayTime startDayTime = new DayTime(0, 0);
-        DayStates startDayState = DayStates.Night;
-        _dayTimeSimulator = new DayTimeSimulator(this, startDayTime, startDayState, realSecondsInMinute);
+        _dayTimeSimulator = new DayTimeSimulator(this, dayTimeConfig);
     }
 }
