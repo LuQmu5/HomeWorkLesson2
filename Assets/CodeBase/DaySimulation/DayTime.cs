@@ -11,11 +11,11 @@ public struct DayTime
 
     public DayTime(int hour, int minute)
     {
-        if (hour < Constants.MinHour || hour > Constants.MaxHour)
-            throw new ArgumentOutOfRangeException($"{nameof(hour)} must be in interval between {Constants.MinHour} and {Constants.MaxHour}");
+        if (hour < GlobalConstants.MinHour || hour > GlobalConstants.MaxHour)
+            throw new ArgumentOutOfRangeException($"{nameof(hour)} must be in interval between {GlobalConstants.MinHour} and {GlobalConstants.MaxHour}");
 
-        if (minute < Constants.MinHour || minute > Constants.MaxMinute)
-            throw new ArgumentOutOfRangeException($"{nameof(minute)} must be in interval between {Constants.MinMinute}  and  {Constants.MaxMinute}");
+        if (minute < GlobalConstants.MinHour || minute > GlobalConstants.MaxMinute)
+            throw new ArgumentOutOfRangeException($"{nameof(minute)} must be in interval between {GlobalConstants.MinMinute}  and  {GlobalConstants.MaxMinute}");
 
         _hour = hour;
         _minute = minute;
@@ -23,19 +23,20 @@ public struct DayTime
 
     private void ValidateHour(int hour)
     {
-        if (hour < Constants.MinHour || hour > Constants.MaxHour)
-            throw new ArgumentOutOfRangeException($"{nameof(hour)} must be in interval between {Constants.MinHour}  and  {Constants.MaxHour}");
+        if (hour < GlobalConstants.MinHour || hour > GlobalConstants.MaxHour)
+            throw new ArgumentOutOfRangeException($"{nameof(hour)} must be in interval between {GlobalConstants.MinHour}  and  {GlobalConstants.MaxHour}");
 
         _hour = hour;
     }
 
     private void ValidateMinute(int minute)
     {
-        if (minute < Constants.MinHour || minute > Constants.MaxMinute)
-            throw new ArgumentOutOfRangeException($"{nameof(minute)} must be in interval between {Constants.MinMinute}  and  {Constants.MaxMinute}");
+        if (minute < GlobalConstants.MinHour || minute > GlobalConstants.MaxMinute)
+            throw new ArgumentOutOfRangeException($"{nameof(minute)} must be in interval between {GlobalConstants.MinMinute}  and  {GlobalConstants.MaxMinute}");
 
         _minute = minute;
     }
+
 
     public override bool Equals(object obj)
     {
@@ -50,6 +51,7 @@ public struct DayTime
     {
         return HashCode.Combine(_hour, _minute, Hour, Minute);
     }
+
 
     public static bool operator ==(DayTime dayTime1, DayTime dayTime2)
     {

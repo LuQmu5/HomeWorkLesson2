@@ -19,10 +19,10 @@ public class DayTimeSimulator
     {
         _dayStatesStartsMap = new Dictionary<int, DayStates>()
         {
-            [Constants.MorningStartHour] = DayStates.Morning,
-            [Constants.DayStartHour] = DayStates.Day,
-            [Constants.EveningStartHour] = DayStates.Evening,
-            [Constants.NightStartHour] = DayStates.Night
+            [GlobalConstants.MorningStartHour] = DayStates.Morning,
+            [GlobalConstants.DayStartHour] = DayStates.Day,
+            [GlobalConstants.EveningStartHour] = DayStates.Evening,
+            [GlobalConstants.NightStartHour] = DayStates.Night
         };
 
         _currentTime = startTime;
@@ -35,9 +35,9 @@ public class DayTimeSimulator
     {
         while (true)
         {
-            while (_currentTime.Hour < Constants.MaxHour)
+            while (_currentTime.Hour < GlobalConstants.MaxHour)
             {
-                while (_currentTime.Minute < Constants.MaxMinute)
+                while (_currentTime.Minute < GlobalConstants.MaxMinute)
                 {
                     float delayTime = realSecondsInMinute;
 
@@ -52,14 +52,14 @@ public class DayTimeSimulator
                     TimeChanged?.Invoke(_currentTime);
                 }
 
-                _currentTime.Minute = Constants.MinMinute;
+                _currentTime.Minute = GlobalConstants.MinMinute;
                 _currentTime.Hour++;
                 TimeChanged?.Invoke(_currentTime);
 
                 CheckForSwitchDayState();
             }
 
-            _currentTime.Hour = Constants.MinHour;
+            _currentTime.Hour = GlobalConstants.MinHour;
             TimeChanged?.Invoke(_currentTime);
         }
     }

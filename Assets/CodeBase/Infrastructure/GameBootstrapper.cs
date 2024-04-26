@@ -37,7 +37,7 @@ public class GameBootstrapper : MonoBehaviour, ICoroutineRunner
 
     private void InitDayTimeSimulator()
     {
-        float realSecondsInMinute = 0.01f;
+        float realSecondsInMinute = 0.1f;
         DayTime startDayTime = new DayTime(0, 0);
         DayStates startDayState = DayStates.Night;
         _dayTimeSimulator = new DayTimeSimulator(this, startDayTime, startDayState, realSecondsInMinute);

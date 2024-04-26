@@ -1,4 +1,4 @@
-﻿public static class Constants
+﻿public static class GlobalConstants
 {
     public const int MinHour = 0;
     public const int MaxHour = 23;

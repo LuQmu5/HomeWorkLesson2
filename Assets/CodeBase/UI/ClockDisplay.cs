@@ -1,6 +1,6 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using TMPro;
 using UnityEngine;
 
@@ -15,7 +15,7 @@ public class ClockDisplay : MonoBehaviour
     {
         _dayTimeSimulator = dayTimeSimulator;
 
-        _timeText.text = GetConvertedTime(startTime.Hour, startTime.Minute);
+        _timeText.text = GetConvertedTime(startTime);
         _dayStateText.text = startDayState.ToString();
 
         _dayTimeSimulator.TimeChanged += OnTimeChanged;
@@ -30,7 +30,7 @@ public class ClockDisplay : MonoBehaviour
 
     private void OnTimeChanged(DayTime dayTime)
     {
-        _timeText.text = GetConvertedTime(dayTime.Hour, dayTime.Minute);
+        _timeText.text = GetConvertedTime(dayTime);
     }
 
     private void OnDayStateChanged(DayStates newState)
@@ -38,22 +38,14 @@ public class ClockDisplay : MonoBehaviour
         _dayStateText.text = newState.ToString();
     }
 
-    private string GetConvertedTime(int hour, int minute)
+    private string GetConvertedTime(DayTime dayTime)
     {
         string result = "";
 
-        result = hour < 10 ? result + $"0{hour}" : result + hour;
+        result += dayTime.Hour < 10 ? $"0{dayTime.Hour}" : dayTime.Hour;
         result += ":";
-        result = minute < 10 ? result + $"0{minute}" : result + minute;
+        result += dayTime.Minute < 10 ?$"0{dayTime.Minute}" : dayTime.Minute;
 
         return result;
-    }
-
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            Time.timeScale = Convert.ToInt32(Time.timeScale == 0);
-        }
     }
 }
