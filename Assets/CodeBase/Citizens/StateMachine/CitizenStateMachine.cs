@@ -30,6 +30,12 @@ public class CitizenStateMachine
             _currentState = new CitizenTradingState(_citizen);
             _currentState.Enter();
         }
+        else if (newBehaviour is CitizenFleeBehaviour)
+        {
+            _currentState?.Exit();
+            _currentState = new CitizenFleeState(_citizen);
+            _currentState.Enter();
+        }
         else
         {
             throw new ArgumentException($"No state for this behaviour");

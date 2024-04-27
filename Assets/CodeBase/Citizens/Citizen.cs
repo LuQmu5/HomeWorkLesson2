@@ -14,7 +14,8 @@ public class Citizen : MonoBehaviour, ICoroutineRunner
     private DayTimeSimulator _dayTimeSimulator;
     private CitizenBehaviour _currentDayRoutineBehaviour;
 
-    public bool IsTrading { get; private set; } = false;
+    private bool _isTrading = false;
+
     public Transform Bed => _bed;
     public Transform WorkingPlace => _workingPlace;
     public NavMeshAgent Mover { get; private set; }
@@ -40,36 +41,35 @@ public class Citizen : MonoBehaviour, ICoroutineRunner
     private void Update()
     {
         _stateMachine.Update();
+        print(_currentDayRoutineBehaviour);
     }
 
-    private void OnMouseDown()
+    public void StartFlee()
     {
-        IsTrading = !IsTrading;
+        _stateMachine.SwitchStateForBehaviour(new CitizenFleeBehaviour());
+    }
 
-        if (IsTrading)
-            TryChangeBehaviour(new CitizenTradingBehaviour());
+    public void BackToDayRoutine()
+    {
+        _stateMachine.SwitchStateForBehaviour(_currentDayRoutineBehaviour);
+    }
+
+    public void SwitchTradeState()
+    {
+        _isTrading = !_isTrading;
+
+        if (_isTrading)
+            _stateMachine.SwitchStateForBehaviour(new CitizenTradingBehaviour());
         else
-            TryChangeBehaviour(_currentDayRoutineBehaviour);
-    }
-
-    public bool TryChangeBehaviour(CitizenBehaviour newBehaviour)
-    {
-        if (newBehaviour == null)
-            return false;
-
-        _stateMachine.SwitchStateForBehaviour(newBehaviour);
-
-        return false;
+            _stateMachine.SwitchStateForBehaviour(_currentDayRoutineBehaviour);
     }
 
     private void OnTimeChanged(DayTime currentTime)
     {
         if (_dayRoutine.ContainsKey(currentTime))
         {
-            CitizenBehaviour newBehaviour = _dayRoutine[currentTime];
-
-            if (TryChangeBehaviour(newBehaviour))
-                _currentDayRoutineBehaviour = newBehaviour;
+            _currentDayRoutineBehaviour = _dayRoutine[currentTime];
+            _stateMachine.SwitchStateForBehaviour(_currentDayRoutineBehaviour);
         }
     }
 }
