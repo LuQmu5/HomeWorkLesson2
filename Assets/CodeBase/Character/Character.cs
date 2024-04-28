@@ -1,7 +1,7 @@
 using UnityEngine;
 
 [RequireComponent(typeof(CharacterController))]
-public class Character : MonoBehaviour
+public class Character : MonoBehaviour, ICoroutineRunner
 {
     [SerializeField] private CharacterView _view;
     [SerializeField] private GroundChecker _groundChecker;
