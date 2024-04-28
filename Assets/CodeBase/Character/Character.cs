@@ -20,12 +20,13 @@ public class Character : MonoBehaviour, ICoroutineRunner
     public CharacterView View => _view;
     public GroundChecker GroundChecker => _groundChecker;
 
-    public void Init(CharacterConfig config)
+    public void Init(CharacterConfig config, CharacterStats stats)
     {
         _controller = GetComponent<CharacterController>();
 
         _config = config;
         _input = new PlayerInput();
+        _stats = stats;
         _view.Initialize();
         _stateMachine = new CharacterStateMachine(this);
     }
@@ -38,10 +39,17 @@ public class Character : MonoBehaviour, ICoroutineRunner
 
     private void OnTriggerEnter(Collider other)
     {
+        if (other.TryGetComponent(out Spikes spikes))
+        {
+            LastDamageSourcePosition = spikes.transform.position;
+            _stats.ApplyDamage(spikes.Damage);
+            _stateMachine.SwitchState<DamagedState>();
+        }
+
         if (other.TryGetComponent(out LevelUpper levelUpper))
         {
-            LastDamageSourcePosition = levelUpper.transform.position;
-            _stateMachine.SwitchState<DamagedState>();
+            levelUpper.gameObject.SetActive(false);
+            _stats.IncreaseLevel();
         }
     }
 
