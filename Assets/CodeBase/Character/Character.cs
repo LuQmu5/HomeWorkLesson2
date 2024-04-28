@@ -21,6 +21,7 @@ public class Character : MonoBehaviour
     public void Init(CharacterConfig config)
     {
         _characterController = GetComponent<CharacterController>();
+
         _config = config;
         _input = new PlayerInput();
         _view.Initialize();
@@ -37,7 +38,7 @@ public class Character : MonoBehaviour
     {
         if (other.TryGetComponent(out LevelUpper levelUpper))
         {
-            _stateMachine.SwitchState<DamagedState>();
+            // levelUpper.gameObject.SetActive(false);
         }
     }
 

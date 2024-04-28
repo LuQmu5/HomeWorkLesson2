@@ -20,6 +20,7 @@ MonoBehaviour:
       _sprintSpeed: 10
   _airborneStateConfig:
     _speed: 5
+    _damageForcePower: {x: -10, y: 10, z: 0}
     _jumpingStateConfig:
       _maxHeight: 4
       _timeToReachMaxHeight: 0.5
