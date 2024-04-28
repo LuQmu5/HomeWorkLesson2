@@ -5,3 +5,4 @@ public interface IState
     void HandleInput();
     void Update();
 }
+

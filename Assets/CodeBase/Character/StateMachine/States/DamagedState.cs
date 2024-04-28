@@ -35,14 +35,24 @@ public class DamagedState : IState
 
     private IEnumerator PushingBack()
     {
-        float pushForce = 3;
-        float animationSpeed = 10;
-        Vector3 endPosition = _character.transform.position + Vector3.up * pushForce + Vector3.left * pushForce;
+        yield return null;
+    }
 
-        while (Vector3.Distance(_character.transform.position, endPosition) > 0.5f)
+    private IEnumerator PushingBackSin()
+    {
+        float amplitude = 3;
+        float speed = 4;
+        float time = 2;
+
+        while (time > 0)
         {
-            _character.transform.position = Vector3.MoveTowards(_character.transform.position, endPosition, Time.deltaTime * animationSpeed);
-            Debug.Log(1);
+            _character.Controller.Move(new Vector2
+            {
+                x = -1 * amplitude * Mathf.Cos(Time.time * speed),
+                y = -1 * amplitude * Mathf.Sin(Time.time * speed)
+            } * Time.deltaTime);
+
+            time -= Time.deltaTime;
 
             yield return null;
         }
