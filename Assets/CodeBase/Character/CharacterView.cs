@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 [RequireComponent(typeof(Animator))]
@@ -16,8 +17,27 @@ public class CharacterView : MonoBehaviour
     private const string IsAirborne = nameof(IsAirborne);
 
     private Animator _animator;
+    private SkinnedMeshRenderer[] _renderers;
 
-    public void Initialize() => _animator = GetComponent<Animator>();
+    private Coroutine _damagedAnimationCoroutine;
+    private Color _normalColor = Color.white;
+    private Color _damagedColor = Color.red;
+
+    public void Initialize()
+    {
+        _animator = GetComponent<Animator>();
+        _renderers = transform.GetComponentsInChildren<SkinnedMeshRenderer>();
+
+        // PlayDamagedAnimation();
+    }
+
+    public void PlayDamagedAnimation()
+    {
+        if (_damagedAnimationCoroutine != null)
+            StopCoroutine(_damagedAnimationCoroutine);
+
+        _damagedAnimationCoroutine = StartCoroutine(DamagedAnimationPlaying());
+    }
 
     public void StartIdling() => _animator.SetBool(IsIdling, true);
     public void StopIdling() => _animator.SetBool(IsIdling, false);
@@ -45,4 +65,26 @@ public class CharacterView : MonoBehaviour
 
     public void StartSprinting() => _animator.SetBool(IsSprinting, true);
     public void StopSprinting() => _animator.SetBool(IsSprinting, false);
+
+    private IEnumerator DamagedAnimationPlaying()
+    {
+        int iterations = 3;
+        float delayBetweenIterations = 0.3f;
+        WaitForSeconds delay = new WaitForSeconds(delayBetweenIterations);
+
+        for (int i = 0; i < iterations; i++)
+        {
+            foreach (var renderer in _renderers)
+                renderer.materials[0].color = _damagedColor;
+
+            yield return delay;
+
+            foreach (var renderer in _renderers)
+                renderer.materials[0].color = _normalColor;
+
+            yield return delay;
+        }
+
+        _damagedAnimationCoroutine = null;
+    }
 }

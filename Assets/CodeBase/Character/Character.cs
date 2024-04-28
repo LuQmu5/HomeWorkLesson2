@@ -3,12 +3,13 @@ using UnityEngine;
 [RequireComponent(typeof(CharacterController))]
 public class Character : MonoBehaviour
 {
-    [SerializeField] private CharacterConfig _config;
     [SerializeField] private CharacterView _view;
     [SerializeField] private GroundChecker _groundChecker;
 
+    private CharacterConfig _config;
     private PlayerInput _input;
     private CharacterStateMachine _stateMachine;
+    private CharacterStats _stats;
     private CharacterController _characterController;
 
     public PlayerInput Input => _input;
@@ -17,19 +18,27 @@ public class Character : MonoBehaviour
     public CharacterView View => _view;
     public GroundChecker GroundChecker => _groundChecker;
 
-    private void Awake()
+    public void Init(CharacterConfig config)
     {
         _characterController = GetComponent<CharacterController>();
-        _view.Initialize();
-
+        _config = config;
         _input = new PlayerInput();
+        _view.Initialize();
         _stateMachine = new CharacterStateMachine(this);
     }
 
     private void Update()
     {
-        _stateMachine.Update();        
-        _stateMachine.HandleInput();
+        _stateMachine?.Update();        
+        _stateMachine?.HandleInput();
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.TryGetComponent(out LevelUpper levelUpper))
+        {
+            _stateMachine.SwitchState<DamagedState>();
+        }
     }
 
     private void OnEnable() => _input.Enable();

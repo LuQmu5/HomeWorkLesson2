@@ -5,10 +5,12 @@ using UnityEngine;
 public class AirborneStateConfig
 {
     [SerializeField, Range(0, 10)] private float _speed;
+    [SerializeField] private Vector3 _damageForcePower;
     [SerializeField] private JumpingStateConfig _jumpingStateConfig;
 
     public JumpingStateConfig JumpingStateConfig => _jumpingStateConfig;
 
+    public Vector3 DamageForcePower => _damageForcePower;
     public float Speed => _speed;
 
     public float BaseGravity 
