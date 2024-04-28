@@ -35,7 +35,23 @@ public class DamagedState : IState
 
     private IEnumerator PushingBack()
     {
-        yield return null;
+        int directionX = _character.transform.position.x < _character.LastDamageSourcePosition.x ? -1 : 1;
+        Vector3 firstPoint = _character.transform.position + new Vector3(directionX * 2.5f, 0);
+        Vector3 secondPoint = _character.transform.position + new Vector3(directionX * 2, 2);
+        Vector3 thirdPoint = _character.transform.position + new Vector3(directionX * 1.5f, 3);
+        Vector3 fourthPoint = _character.transform.position;
+        float time = 1; // 0 - 1
+        float speed = 2;
+
+        while (time > 0)
+        {
+            _character.transform.position = Bezier.GetPoint(firstPoint, secondPoint, thirdPoint, fourthPoint, time);
+            time -= Time.deltaTime * speed;
+
+            yield return null;
+        }
+
+        _stateMachine.SwitchState<IdlingState>();
     }
 
     private IEnumerator PushingBackSin()

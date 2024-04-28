@@ -12,6 +12,8 @@ public class Character : MonoBehaviour, ICoroutineRunner
     private CharacterStats _stats;
     private CharacterController _controller;
 
+    public Vector3 LastDamageSourcePosition { get; private set; }
+
     public PlayerInput Input => _input;
     public CharacterController Controller => _controller;
     public CharacterConfig Config => _config;
@@ -38,6 +40,7 @@ public class Character : MonoBehaviour, ICoroutineRunner
     {
         if (other.TryGetComponent(out LevelUpper levelUpper))
         {
+            LastDamageSourcePosition = levelUpper.transform.position;
             _stateMachine.SwitchState<DamagedState>();
         }
     }

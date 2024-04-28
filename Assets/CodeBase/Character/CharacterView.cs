@@ -27,8 +27,6 @@ public class CharacterView : MonoBehaviour
     {
         _animator = GetComponent<Animator>();
         _renderers = transform.GetComponentsInChildren<SkinnedMeshRenderer>();
-
-        // PlayDamagedAnimation();
     }
 
     public void PlayDamagedAnimation()
@@ -69,7 +67,7 @@ public class CharacterView : MonoBehaviour
     private IEnumerator DamagedAnimationPlaying()
     {
         int iterations = 3;
-        float delayBetweenIterations = 0.3f;
+        float delayBetweenIterations = 0.1f;
         WaitForSeconds delay = new WaitForSeconds(delayBetweenIterations);
 
         for (int i = 0; i < iterations; i++)
