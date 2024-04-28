@@ -10,17 +10,17 @@ public class Character : MonoBehaviour
     private PlayerInput _input;
     private CharacterStateMachine _stateMachine;
     private CharacterStats _stats;
-    private CharacterController _characterController;
+    private CharacterController _controller;
 
     public PlayerInput Input => _input;
-    public CharacterController CharacterController => _characterController;
+    public CharacterController Controller => _controller;
     public CharacterConfig Config => _config;
     public CharacterView View => _view;
     public GroundChecker GroundChecker => _groundChecker;
 
     public void Init(CharacterConfig config)
     {
-        _characterController = GetComponent<CharacterController>();
+        _controller = GetComponent<CharacterController>();
 
         _config = config;
         _input = new PlayerInput();
@@ -30,15 +30,15 @@ public class Character : MonoBehaviour
 
     private void Update()
     {
-        _stateMachine?.Update();        
-        _stateMachine?.HandleInput();
+        _stateMachine.Update();        
+        _stateMachine.HandleInput();
     }
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.TryGetComponent(out LevelUpper levelUpper))
         {
-            // levelUpper.gameObject.SetActive(false);
+            _stateMachine.SwitchState<DamagedState>();
         }
     }
 

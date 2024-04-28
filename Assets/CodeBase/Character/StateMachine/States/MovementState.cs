@@ -15,7 +15,7 @@ public abstract class MovementState : IState
     }
 
     protected PlayerInput Input => _character.Input;
-    protected CharacterController CharacterController => _character.CharacterController;
+    protected CharacterController Controller => _character.Controller;
     protected CharacterView View => _character.View;
     protected bool IsShiftDown => Input.Movement.Sprint.ReadValue<float>() == 1;
     protected bool IsAltDown => Input.Movement.Walk.ReadValue<float>() == 1;
@@ -44,7 +44,7 @@ public abstract class MovementState : IState
     {
         Vector3 velocity = GetConvertedVelocity();
 
-        CharacterController.Move(velocity * Time.deltaTime);
+        Controller.Move(velocity * Time.deltaTime);
         _character.transform.rotation = GetRotationFrom(velocity);
     }
 

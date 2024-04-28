@@ -18,6 +18,7 @@ public class CharacterStateMachine: IStateSwitcher
             new JumpingState(this, data, character),
             new WalkingState(this, data, character),
             new SprintingState(this, data, character),
+            new DamagedState(this, character),
         };
 
         _currentState = _states[0];
