@@ -16,8 +16,8 @@ public class CharacterStats
     public CharacterStats()
     {
         _currentLevel = 1;
-        _maxHealth = 100;
-        _currentHealth = 100;
+        _maxHealth = 30;
+        _currentHealth = _maxHealth;
 
         LevelChanged?.Invoke(_currentLevel);
         HealthChanged?.Invoke(_currentHealth);
@@ -44,5 +44,15 @@ public class CharacterStats
         _currentLevel += amount;
 
         LevelChanged?.Invoke(_currentLevel);
+    }
+
+    public void ResetStats()
+    {
+        _currentLevel = 1;
+        _maxHealth = 30;
+        _currentHealth = _maxHealth;
+
+        LevelChanged?.Invoke(_currentLevel);
+        HealthChanged?.Invoke(_currentHealth);
     }
 }

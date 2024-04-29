@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 [RequireComponent(typeof(CharacterController))]
@@ -56,4 +57,12 @@ public class Character : MonoBehaviour, ICoroutineRunner
     private void OnEnable() => _input.Enable();
 
     private void OnDisable() => _input.Disable();
+
+    public void WarpTo(Vector3 position)
+    {
+        _stateMachine.SwitchState<IdlingState>();
+        _controller.enabled = false;
+        transform.position = position;
+        _controller.enabled = true;
+    }
 }

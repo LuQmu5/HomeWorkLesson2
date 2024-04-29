@@ -4,6 +4,8 @@ using UnityEngine;
 [RequireComponent(typeof(Animator))]
 public class CharacterView : MonoBehaviour
 {
+    [SerializeField] private GameObject _model;
+
     private const string IsGrounded = nameof(IsGrounded);
     private const string IsIdling = nameof(IsIdling);
     private const string IsWalking = nameof(IsWalking);
@@ -22,6 +24,8 @@ public class CharacterView : MonoBehaviour
     private Coroutine _damagedAnimationCoroutine;
     private Color _normalColor = Color.white;
     private Color _damagedColor = Color.red;
+
+    public GameObject Model => _model;
 
     public void Initialize()
     {

@@ -5,6 +5,7 @@ public class DamagedState : IState
 {
     private CharacterStateMachine _stateMachine;
     private Character _character;
+    private Coroutine _pushingBackCoroutine;
 
     public DamagedState(CharacterStateMachine stateMachine, Character character)
     {
@@ -14,13 +15,14 @@ public class DamagedState : IState
 
     public void Enter()
     {
-        _character.StartCoroutine(PushingBack());
+        _pushingBackCoroutine = _character.StartCoroutine(PushingBack());
         _character.View.PlayDamagedAnimation();
     }
 
     public void Exit()
     {
-        
+        if (_pushingBackCoroutine != null)
+            _character.StopCoroutine(_pushingBackCoroutine);
     }
 
     public void HandleInput()
@@ -51,28 +53,7 @@ public class DamagedState : IState
             yield return null;
         }
 
-        _stateMachine.SwitchState<IdlingState>();
-    }
-
-    private IEnumerator PushingBackSin()
-    {
-        float amplitude = 3;
-        float speed = 4;
-        float time = 2;
-
-        while (time > 0)
-        {
-            _character.Controller.Move(new Vector2
-            {
-                x = -1 * amplitude * Mathf.Cos(Time.time * speed),
-                y = -1 * amplitude * Mathf.Sin(Time.time * speed)
-            } * Time.deltaTime);
-
-            time -= Time.deltaTime;
-
-            yield return null;
-        }
-
+        _pushingBackCoroutine = null;
         _stateMachine.SwitchState<IdlingState>();
     }
 }
