@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class CitizenPatrolState : CitizenActionState
 {
-    private float _minDistanceToPoint = 1f;
+    private float _minDistanceToPoint = 2f;
     private int _currentPointIndex = 0;
     private Transform[] _patrolPoints;
     private Coroutine _patrolCoroutine;

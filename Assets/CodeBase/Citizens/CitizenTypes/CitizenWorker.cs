@@ -3,14 +3,14 @@ using UnityEngine;
 
 public class CitizenWorker : Citizen
 {
-    [field: SerializeField] public Transform Work { get; private set; }
+    [field: SerializeField] public Transform WorkingPlace { get; private set; }
 
     protected override Dictionary<CitizenBehaviours, Transform> GetBehaviourWayPointsMap()
     {
         return new Dictionary<CitizenBehaviours, Transform>()
         {
             [CitizenBehaviours.Sleep] = Bed,
-            [CitizenBehaviours.Work] = Work,
+            [CitizenBehaviours.Work] = WorkingPlace,
         };
     }
 
@@ -18,8 +18,8 @@ public class CitizenWorker : Citizen
     {
         return new Dictionary<DayTime, CitizenBehaviours>()
         {
-            [new DayTime(10)] = CitizenBehaviours.Work,
-            [new DayTime(20)] = CitizenBehaviours.Sleep,
+            [new DayTime(8)] = CitizenBehaviours.Work,
+            [new DayTime(18)] = CitizenBehaviours.Sleep,
         };
     }
 

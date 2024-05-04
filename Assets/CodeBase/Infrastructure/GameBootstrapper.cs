@@ -28,7 +28,8 @@ public class GameBootstrapper : MonoBehaviour, ICoroutineRunner
     {
         foreach (var citizen in _citizens)
         {
-            citizen.Init(_dayTimeSimulator, CitizenBehaviours.Sleep);
+            if (citizen.gameObject.activeSelf)
+                citizen.Init(_dayTimeSimulator, CitizenBehaviours.Sleep);
         }
     }
 
