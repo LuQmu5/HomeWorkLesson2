@@ -1,14 +1,16 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
-public class CitizenWorker : Citizen
+public class CitizenSherif : Citizen
 {
+    [field: SerializeField] public Transform[] PatrolPoints { get; private set; }
+
     protected override Dictionary<CitizenBehaviours, Transform> GetBehaviourWayPointsMap()
     {
         return new Dictionary<CitizenBehaviours, Transform>()
         {
             [CitizenBehaviours.Sleep] = Bed,
-            [CitizenBehaviours.Work] = Work,
         };
     }
 
@@ -16,8 +18,8 @@ public class CitizenWorker : Citizen
     {
         return new Dictionary<DayTime, CitizenBehaviours>()
         {
-            [new DayTime(10)] = CitizenBehaviours.Work,
-            [new DayTime(20)] = CitizenBehaviours.Sleep,
+            [new DayTime(7)] = CitizenBehaviours.Patrol,
+            [new DayTime(22)] = CitizenBehaviours.Sleep,
         };
     }
 
@@ -26,7 +28,7 @@ public class CitizenWorker : Citizen
         return new Dictionary<CitizenBehaviours, IState>()
         {
             [CitizenBehaviours.Sleep] = new CitizenSleepState(_stateMachine, this),
-            [CitizenBehaviours.Work] = new CitizenWorkState(_stateMachine, this),
+            [CitizenBehaviours.Patrol] = new CitizenPatrolState(_stateMachine, this),
             [CitizenBehaviours.Move] = new CitizenMoveToPointState(_stateMachine, this),
         };
     }

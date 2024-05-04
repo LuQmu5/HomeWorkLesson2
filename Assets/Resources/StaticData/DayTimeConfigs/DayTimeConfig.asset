@@ -19,4 +19,4 @@ MonoBehaviour:
     _eveningStartHour: 18
     _nightStartHour: 0
   _daySpeedTimeConfig:
-    _realSecondsInOneMinute: 0.01
+    _realSecondsInOneMinute: 1

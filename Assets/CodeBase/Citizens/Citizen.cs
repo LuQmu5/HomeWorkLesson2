@@ -9,7 +9,6 @@ public abstract class Citizen : MonoBehaviour
     private const float MinDistanceToReachWayPoint = 1f;
 
     [field: SerializeField] public Transform Bed { get; private set; }
-    [field: SerializeField] public Transform Work { get; private set; }
 
     protected CitizenStateMachine _stateMachine;
 

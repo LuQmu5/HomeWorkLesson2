@@ -3,5 +3,6 @@
     Idle,
     Sleep,
     Work,
-    Move
+    Move,
+    Patrol
 }
