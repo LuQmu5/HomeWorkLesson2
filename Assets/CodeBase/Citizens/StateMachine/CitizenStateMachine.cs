@@ -13,9 +13,9 @@ public class CitizenStateMachine : IStateSwitcher
 
         _statesMap = new Dictionary<CitizenBehaviours, IState>()
         {
-            [CitizenBehaviours.Sleep] = new CitizenSleepState(this, _citizen, _citizen.WayPoints.Bed),
+            [CitizenBehaviours.Sleep] = new CitizenSleepState(this, _citizen),
             [CitizenBehaviours.Move] = new CitizenMoveToPointState(this, _citizen),
-            [CitizenBehaviours.Work] = new CitizenWorkState(this, _citizen, _citizen.WayPoints.WorkingPlace),
+            [CitizenBehaviours.Work] = new CitizenWorkState(this, _citizen),
         };
     }
 
@@ -28,7 +28,7 @@ public class CitizenStateMachine : IStateSwitcher
 
         _currentState?.Exit();
         _currentState = state;
-        _currentState?.Enter();
+        _currentState.Enter();
     }
 
     public void Update()

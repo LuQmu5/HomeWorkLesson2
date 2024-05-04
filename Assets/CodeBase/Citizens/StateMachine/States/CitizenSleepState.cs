@@ -1,45 +1,26 @@
-﻿using UnityEngine;
-
-public class CitizenSleepState : IState
+﻿public class CitizenSleepState : CitizenActionState
 {
-    private readonly IStateSwitcher _stateSwitcher;
-    private readonly Citizen _citizen;
-
-    private Transform _bed;
-
-    public CitizenSleepState(IStateSwitcher stateSwitcher, Citizen citizen, Transform bed)
+    public CitizenSleepState(IStateSwitcher stateSwitcher, Citizen citizen) : base(stateSwitcher, citizen)
     {
-        _stateSwitcher = stateSwitcher;
-        _citizen = citizen; 
-        _bed = bed;
     }
 
-    public void Enter()
+    protected override bool IsActionCanStarted()
     {
-        _citizen.BehaviourSwitched += OnCitizenBehaviourSwitched;
-
-        if (Vector3.Distance(_citizen.transform.position, _bed.transform.position) < 1)
-        {
-            Debug.Log("сплу");
-        }
-        else
-        {
-            _stateSwitcher.SwitchStateForBehaviour(CitizenBehaviours.Move);
-        }
+        return true;
     }
 
-    public void Exit()
+    protected override void OnActionStartFailed()
     {
-        _citizen.BehaviourSwitched -= OnCitizenBehaviourSwitched;
+        
     }
 
-    public void Update()
+    protected override void StartAction()
     {
-        Debug.Log("Zzz...");
+        
     }
 
-    private void OnCitizenBehaviourSwitched(CitizenBehaviours newBehaviour)
+    protected override void StopAction()
     {
-        _stateSwitcher.SwitchStateForBehaviour(newBehaviour);
+        
     }
 }

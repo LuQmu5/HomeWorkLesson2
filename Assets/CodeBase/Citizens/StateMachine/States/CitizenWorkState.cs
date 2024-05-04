@@ -1,45 +1,26 @@
-﻿using UnityEngine;
-
-public class CitizenWorkState : IState
+﻿public class CitizenWorkState : CitizenActionState
 {
-    private readonly IStateSwitcher _stateSwitcher;
-    private readonly Citizen _citizen;
-
-    private Transform _workingPlace;
-
-    public CitizenWorkState(IStateSwitcher stateSwitcher, Citizen citizen, Transform workingPlace)
+    public CitizenWorkState(IStateSwitcher stateSwitcher, Citizen citizen) : base(stateSwitcher, citizen)
     {
-        _stateSwitcher = stateSwitcher;
-        _citizen = citizen;
-        _workingPlace = workingPlace;
     }
 
-    public void Enter()
+    protected override bool IsActionCanStarted()
     {
-        _citizen.BehaviourSwitched += OnCitizenBehaviourSwitched;
-
-        if (Vector3.Distance(_citizen.transform.position, _workingPlace.transform.position) < 1)
-        {
-            Debug.Log("работаю");
-        }
-        else
-        {
-            _stateSwitcher.SwitchStateForBehaviour(CitizenBehaviours.Move);
-        }
+        return true;
     }
 
-    public void Exit()
+    protected override void OnActionStartFailed()
     {
-        _citizen.BehaviourSwitched -= OnCitizenBehaviourSwitched;
+
     }
 
-    public void Update()
+    protected override void StartAction()
     {
-        Debug.Log("work work work...");
+
     }
 
-    private void OnCitizenBehaviourSwitched(CitizenBehaviours newBehaviour)
+    protected override void StopAction()
     {
-        _stateSwitcher.SwitchStateForBehaviour(newBehaviour);
+
     }
 }

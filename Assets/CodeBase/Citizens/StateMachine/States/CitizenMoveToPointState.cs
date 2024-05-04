@@ -1,45 +1,16 @@
-﻿
-using UnityEngine;
+﻿using UnityEngine;
 
-public class CitizenMoveToPointState : IState
+public class CitizenMoveToPointState : CitizenBaseState
 {
-    private readonly IStateSwitcher _stateSwitcher;
-    private readonly Citizen _citizen;
-
-    private Vector3 _targetPoint;
-
-    public CitizenMoveToPointState(IStateSwitcher stateSwitcher, Citizen citizen)
+    public CitizenMoveToPointState(IStateSwitcher stateSwitcher, Citizen citizen) : base(stateSwitcher, citizen)
     {
-        _stateSwitcher = stateSwitcher;
-        _citizen = citizen;
+        
     }
 
-    public void Enter()
+    public override void Enter()
     {
-        _citizen.BehaviourSwitched += OnCitizenBehaviourSwitched;
+        base.Enter();
 
-        _targetPoint = _citizen.WayPoints.CurrentWayPoint;
-        _citizen.Mover.SetDestination(_targetPoint);
-        Debug.Log("начинаю идти");
-    }
-
-    public void Exit()
-    {
-        _citizen.BehaviourSwitched -= OnCitizenBehaviourSwitched;
-    }
-
-    public void Update()
-    {
-        Debug.Log("иду");
-
-        if (Vector3.Distance(_citizen.transform.position, _targetPoint) < 1)
-        {
-            _stateSwitcher.SwitchStateForBehaviour(_citizen.CurrentRoutineBehaviour);
-        }
-    }
-
-    private void OnCitizenBehaviourSwitched(CitizenBehaviours newBehaviour)
-    {
-        _stateSwitcher.SwitchStateForBehaviour(newBehaviour);
+        _citizen.Mover.SetDestination(_citizen.transform.position);
     }
 }
