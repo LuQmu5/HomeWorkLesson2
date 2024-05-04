@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class CitizenWorkState : CitizenActionState
+public class CitizenWorkState : CitizenFailableActionState
 {
     public CitizenWorkState(IStateSwitcher stateSwitcher, Citizen citizen) : base(stateSwitcher, citizen)
     {

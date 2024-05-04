@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-public class CitizenSleepState : CitizenActionState
+public class CitizenSleepState : CitizenFailableActionState
 {
     public CitizenSleepState(IStateSwitcher stateSwitcher, Citizen citizen) : base(stateSwitcher, citizen)
     {

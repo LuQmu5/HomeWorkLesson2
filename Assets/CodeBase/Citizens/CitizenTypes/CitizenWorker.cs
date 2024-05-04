@@ -5,6 +5,11 @@ public class CitizenWorker : Citizen
 {
     [field: SerializeField] public Transform WorkingPlace { get; private set; }
 
+    public override void Attack()
+    {
+        _stateMachine.SwitchStateForBehaviour(CitizenBehaviours.Flee);
+    }
+
     protected override Dictionary<CitizenBehaviours, Transform> GetBehaviourWayPointsMap()
     {
         return new Dictionary<CitizenBehaviours, Transform>()
@@ -30,6 +35,7 @@ public class CitizenWorker : Citizen
             [CitizenBehaviours.Sleep] = new CitizenSleepState(_stateMachine, this),
             [CitizenBehaviours.Work] = new CitizenWorkState(_stateMachine, this),
             [CitizenBehaviours.Move] = new CitizenMoveToPointState(_stateMachine, this),
+            [CitizenBehaviours.Flee] = new CitizenFleeState(_stateMachine, this),
         };
     }
 }

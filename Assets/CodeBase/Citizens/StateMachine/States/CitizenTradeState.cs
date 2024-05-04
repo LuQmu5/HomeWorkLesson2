@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class CitizenTradeState : CitizenActionState
+public class CitizenTradeState : CitizenFailableActionState
 {
     private CitizenTrader _citizenTrader;
 

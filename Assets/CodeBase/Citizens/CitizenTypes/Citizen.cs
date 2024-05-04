@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.AI;
 
 [RequireComponent(typeof(NavMeshAgent))]
-public abstract class Citizen : MonoBehaviour
+public abstract class Citizen : MonoBehaviour, IAttackable
 {
     private const float MinDistanceToReachWayPoint = 1f;
 
@@ -43,7 +43,6 @@ public abstract class Citizen : MonoBehaviour
     {
         _dayTimeSimulator.TimeChanged -= OnTimeChanged;
     }
-
     private void Update()
     {
         _stateMachine.Update();    
@@ -53,6 +52,8 @@ public abstract class Citizen : MonoBehaviour
     {
         return Vector3.Distance(transform.position, CurrentWayPoint.position) < MinDistanceToReachWayPoint;
     }
+
+    public abstract void Attack();
 
     private void OnTimeChanged(DayTime currentTime)
     {

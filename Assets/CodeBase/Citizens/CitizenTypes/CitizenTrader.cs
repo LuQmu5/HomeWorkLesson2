@@ -21,6 +21,11 @@ public class CitizenTrader : Citizen
             TradingEnded?.Invoke();
     }
 
+    public override void Attack()
+    {
+        _stateMachine.SwitchStateForBehaviour(CitizenBehaviours.Flee);
+    }
+
     protected override Dictionary<CitizenBehaviours, Transform> GetBehaviourWayPointsMap()
     {
         return new Dictionary<CitizenBehaviours, Transform>()
@@ -46,6 +51,7 @@ public class CitizenTrader : Citizen
             [CitizenBehaviours.Sleep] = new CitizenSleepState(_stateMachine, this),
             [CitizenBehaviours.Work] = new CitizenTradeState(_stateMachine, this),
             [CitizenBehaviours.Move] = new CitizenMoveToPointState(_stateMachine, this),
+            [CitizenBehaviours.Flee] = new CitizenFleeState(_stateMachine, this),
         };
     }
 }

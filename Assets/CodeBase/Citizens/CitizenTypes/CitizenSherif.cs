@@ -6,6 +6,11 @@ public class CitizenSherif : Citizen
 {
     [field: SerializeField] public Transform[] PatrolPoints { get; private set; }
 
+    public override void Attack()
+    {
+        _stateMachine.SwitchStateForBehaviour(CitizenBehaviours.SelfDefending);
+    }
+
     protected override Dictionary<CitizenBehaviours, Transform> GetBehaviourWayPointsMap()
     {
         return new Dictionary<CitizenBehaviours, Transform>()
@@ -30,6 +35,7 @@ public class CitizenSherif : Citizen
             [CitizenBehaviours.Sleep] = new CitizenSleepState(_stateMachine, this),
             [CitizenBehaviours.Patrol] = new CitizenPatrolState(_stateMachine, this),
             [CitizenBehaviours.Move] = new CitizenMoveToPointState(_stateMachine, this),
+            [CitizenBehaviours.SelfDefending] = new CitizenDefendingState(_stateMachine, this),
         };
     }
 }

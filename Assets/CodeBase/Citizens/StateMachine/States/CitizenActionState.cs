@@ -8,10 +8,7 @@
     {
         base.Enter();
 
-        if (IsActionCanStarted())
-            StartAction();
-        else
-            OnActionStartFailed();
+        StartAction();
     }
 
     public override void Exit()
@@ -21,8 +18,6 @@
         StopAction();
     }
 
-    protected abstract bool IsActionCanStarted();
-    protected abstract void OnActionStartFailed();
     protected abstract void StartAction();
     protected abstract void StopAction();
 }

@@ -14,16 +14,6 @@ public class CitizenPatrolState : CitizenActionState
         _patrolPoints = citizen.PatrolPoints;
     }
 
-    protected override bool IsActionCanStarted()
-    {
-        return true;
-    }
-
-    protected override void OnActionStartFailed()
-    {
-        
-    }
-
     protected override void StartAction()
     {
         _patrolCoroutine = _citizen.StartCoroutine(Patroling());

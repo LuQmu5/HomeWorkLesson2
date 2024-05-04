@@ -4,5 +4,7 @@
     Sleep,
     Work,
     Move,
-    Patrol
+    Patrol,
+    SelfDefending,
+    Flee
 }
