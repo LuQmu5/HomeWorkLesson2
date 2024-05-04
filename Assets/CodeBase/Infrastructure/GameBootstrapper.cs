@@ -26,15 +26,9 @@ public class GameBootstrapper : MonoBehaviour, ICoroutineRunner
 
     private void InitCitizens()
     {
-        Dictionary<DayTime, CitizenBehaviours> workerDayRoutine = new Dictionary<DayTime, CitizenBehaviours>()
-        {
-            [new DayTime(10)] = CitizenBehaviours.Work,
-            [new DayTime(20)] = CitizenBehaviours.Sleep,
-        };
-
         foreach (var citizen in _citizens)
         {
-            citizen.Init(_dayTimeSimulator, workerDayRoutine, CitizenBehaviours.Sleep);
+            citizen.Init(_dayTimeSimulator, CitizenBehaviours.Sleep);
         }
     }
 

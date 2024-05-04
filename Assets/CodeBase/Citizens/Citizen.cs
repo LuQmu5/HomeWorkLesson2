@@ -4,26 +4,37 @@ using UnityEngine;
 using UnityEngine.AI;
 
 [RequireComponent(typeof(NavMeshAgent))]
-public class Citizen : MonoBehaviour
+public abstract class Citizen : MonoBehaviour
 {
-    private CitizenStateMachine _stateMachine;
-    private DayTimeSimulator _dayTimeSimulator;
-    private Dictionary<DayTime, CitizenBehaviours> _dayRoutine;
-    private CitizenBehaviours _currentRoutineBehaviour;
+    private const float MinDistanceToReachWayPoint = 1f;
 
+    [field: SerializeField] public Transform Bed { get; private set; }
+    [field: SerializeField] public Transform Work { get; private set; }
+
+    protected CitizenStateMachine _stateMachine;
+
+    private DayTimeSimulator _dayTimeSimulator;
+
+    private Dictionary<DayTime, CitizenBehaviours> _dayRoutine;
+    private Dictionary<CitizenBehaviours, Transform> _behaviourWayPoints;
+
+    public CitizenBehaviours CurrentRoutineBehaviour { get; private set; }
     public NavMeshAgent Mover { get; private set; }
+    public Transform CurrentWayPoint => _behaviourWayPoints[CurrentRoutineBehaviour];
 
     public event Action<CitizenBehaviours> BehaviourSwitched;
 
-    public void Init(DayTimeSimulator dayTimeSimulator, Dictionary<DayTime, CitizenBehaviours> dayRoutine, CitizenBehaviours startBehaviour)
+    public void Init(DayTimeSimulator dayTimeSimulator, CitizenBehaviours startBehaviour)
     {
         Mover = GetComponent<NavMeshAgent>();   
 
-        _currentRoutineBehaviour = startBehaviour;
-        _dayRoutine = dayRoutine;
+        CurrentRoutineBehaviour = startBehaviour;
+        _dayRoutine = GetDayRoutineMap();
+        _behaviourWayPoints = GetBehaviourWayPointsMap();
 
-        _stateMachine = new CitizenStateMachine(this);
-        _stateMachine.SwitchStateForBehaviour(_currentRoutineBehaviour);
+        _stateMachine = new CitizenStateMachine();
+        _stateMachine.Init(GetStatesBehaviourMap());
+        _stateMachine.SwitchStateForBehaviour(CurrentRoutineBehaviour);
 
         _dayTimeSimulator = dayTimeSimulator;
         _dayTimeSimulator.TimeChanged += OnTimeChanged;
@@ -39,13 +50,22 @@ public class Citizen : MonoBehaviour
         _stateMachine.Update();    
     }
 
+    public bool IsWayPointReached()
+    {
+        return Vector3.Distance(transform.position, CurrentWayPoint.position) < MinDistanceToReachWayPoint;
+    }
+
     private void OnTimeChanged(DayTime currentTime)
     {
         if (_dayRoutine.ContainsKey(currentTime))
         {
-            _currentRoutineBehaviour = _dayRoutine[currentTime];
+            CurrentRoutineBehaviour = _dayRoutine[currentTime];
 
-            BehaviourSwitched?.Invoke(_currentRoutineBehaviour);
+            BehaviourSwitched?.Invoke(CurrentRoutineBehaviour);
         }
     }
+
+    protected abstract Dictionary<CitizenBehaviours, IState> GetStatesBehaviourMap();
+    protected abstract Dictionary<DayTime, CitizenBehaviours> GetDayRoutineMap();
+    protected abstract Dictionary<CitizenBehaviours, Transform> GetBehaviourWayPointsMap();
 }
