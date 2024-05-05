@@ -33,7 +33,7 @@ public abstract class Citizen : MonoBehaviour, IAttackable
 
         _stateMachine = new CitizenStateMachine();
         _stateMachine.Init(GetStatesBehaviourMap());
-        _stateMachine.SwitchStateForBehaviour(CurrentRoutineBehaviour);
+        _stateMachine.TrySwitchStateForBehaviour(CurrentRoutineBehaviour);
 
         _dayTimeSimulator = dayTimeSimulator;
         _dayTimeSimulator.TimeChanged += OnTimeChanged;
@@ -63,6 +63,11 @@ public abstract class Citizen : MonoBehaviour, IAttackable
 
             BehaviourSwitched?.Invoke(CurrentRoutineBehaviour);
         }
+    }
+
+    protected void SwitchBehaviour(CitizenBehaviours newBehaviour)
+    {
+        BehaviourSwitched?.Invoke(newBehaviour);
     }
 
     protected abstract Dictionary<CitizenBehaviours, IState> GetStatesBehaviourMap();
