@@ -8,7 +8,7 @@ public class CitizenSherif : Citizen
 
     public override void Attack()
     {
-        _stateMachine.SwitchStateForBehaviour(CitizenBehaviours.SelfDefending);
+        SwitchBehaviour(CitizenBehaviours.SelfDefending);
     }
 
     protected override Dictionary<CitizenBehaviours, Transform> GetBehaviourWayPointsMap()

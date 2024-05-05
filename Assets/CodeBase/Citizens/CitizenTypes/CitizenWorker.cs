@@ -7,7 +7,7 @@ public class CitizenWorker : Citizen
 
     public override void Attack()
     {
-        _stateMachine.SwitchStateForBehaviour(CitizenBehaviours.Flee);
+        SwitchBehaviour(CitizenBehaviours.Flee);
     }
 
     protected override Dictionary<CitizenBehaviours, Transform> GetBehaviourWayPointsMap()

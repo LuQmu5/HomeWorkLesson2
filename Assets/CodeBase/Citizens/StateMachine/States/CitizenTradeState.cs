@@ -17,12 +17,16 @@ public class CitizenTradeState : CitizenFailableActionState
 
     protected override bool IsActionCanStarted()
     {
-        return _citizen.IsWayPointReached();
+        return _citizen.IsWayPointReached() || 
+            _citizen.CurrentRoutineBehaviour == CitizenBehaviours.Sleep;
     }
 
     protected override void OnActionStartFailed()
     {
-        _stateSwitcher.SwitchStateForBehaviour(CitizenBehaviours.Move);
+        if (_citizen.CurrentRoutineBehaviour == CitizenBehaviours.Sleep)
+            Debug.Log("Какой еще трейд... я сплю");
+        else if (_citizen.CurrentRoutineBehaviour == CitizenBehaviours.Work)
+            _stateSwitcher.SwitchStateForBehaviour(CitizenBehaviours.Move);
     }
 
     protected override void StartAction()
