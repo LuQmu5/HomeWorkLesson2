@@ -39,8 +39,10 @@ public abstract class MovementState : BaseState
 
     public override void Update()
     {
-        Vector3 velocity = GetConvertedVelocity();
+        if (Controller.enabled == false)
+            return; 
 
+        Vector3 velocity = GetConvertedVelocity();
         Controller.Move(velocity * Time.deltaTime);
         Character.transform.rotation = GetRotationFrom(velocity);
     }

@@ -18,18 +18,12 @@ public class GameManagement
         _refreshableObjects = refreshableObjects;
     }
 
-    public void PauseGame()
+    public void EndGame()
     {
-        Time.timeScale = 0;
-    }
+        Debug.Log("GG");
 
-    public void ShowCharacterView()
-    {
-        _character.View.Show();
-    }
-
-    public void HideCharacterView()
-    {
+        _character.Controller.enabled = false;
+        _character.Input.Disable();
         _character.View.Hide();
     }
 
@@ -42,12 +36,14 @@ public class GameManagement
     public void RestartGame()
     {
         Debug.Log("restart");
-        Time.timeScale = 1;
         _characterStats.ResetStats();
+        _character.transform.position = _characterStartPosition;
 
         foreach (var obj in _refreshableObjects)
             obj.Refresh();
 
-        _character.WarpTo(_characterStartPosition);
+        _character.Controller.enabled = true;
+        _character.Input.Enable();
+        _character.View.Show();
     }
 }

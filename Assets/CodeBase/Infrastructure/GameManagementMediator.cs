@@ -29,8 +29,7 @@ public class GameManagementMediator : IDisposable
     private void OnCharacterDied()
     {
         _gameOverPanel.Show();
-        _gameManagement.PauseGame();
-        _gameManagement.HideCharacterView();
+        _gameManagement.EndGame();
     }
 
     private void OnExitButtonClicked()
@@ -42,6 +41,5 @@ public class GameManagementMediator : IDisposable
     {
         _gameOverPanel.Hide();
         _gameManagement.RestartGame();
-        _gameManagement.ShowCharacterView();
     }
 }
