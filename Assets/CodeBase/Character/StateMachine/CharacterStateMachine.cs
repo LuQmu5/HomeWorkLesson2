@@ -13,12 +13,12 @@ public class CharacterStateMachine: IStateSwitcher
         _states = new List<IState>()
         {
             new IdlingState(this, data, character),
-            new RunningState(this, data, character),
+            new NormalRunningState(this, data, character),
             new FallingState(this, data, character),
             new JumpingState(this, data, character),
             new WalkingState(this, data, character),
             new SprintingState(this, data, character),
-            new DamagedState(this, character),
+            new DamagedState(this, data, character),
         };
 
         _currentState = _states[0];

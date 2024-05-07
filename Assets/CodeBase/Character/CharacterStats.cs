@@ -2,38 +2,37 @@
 
 public class CharacterStats
 {
-    private int _currentLevel;
-    private int _maxHealth;
-    private int _currentHealth;
+    private int _startLevel;
+    private int _startMaxHealth;
 
-    public int CurrentLevel => _currentLevel;
-    public int MaxHealth => _maxHealth;
-    public int CurrentHealth => _currentHealth;
+    public int CurrentLevel { get; private set; }
+    public int MaxHealth { get; private set; }
+    public int CurrentHealth { get; private set; }
 
     public event Action<int> LevelChanged;
     public event Action<int> HealthChanged;
 
-    public CharacterStats()
+    public CharacterStats(int startLevel, int startMaxHealth)
     {
-        _currentLevel = 1;
-        _maxHealth = 30;
-        _currentHealth = _maxHealth;
+        _startLevel = startLevel;
+        _startMaxHealth = startMaxHealth;
 
-        LevelChanged?.Invoke(_currentLevel);
-        HealthChanged?.Invoke(_currentHealth);
+        CurrentLevel = _startLevel;
+        MaxHealth = _startMaxHealth;
+        CurrentHealth = _startMaxHealth;
+
+        LevelChanged?.Invoke(CurrentLevel);
+        HealthChanged?.Invoke(CurrentHealth);
     }
 
-    public void ApplyDamage(int amount)
+    public void ResetStats()
     {
-        if (amount < 0)
-            throw new ArgumentOutOfRangeException(nameof(amount) + " can't be less than 0");
+        CurrentLevel = _startLevel;
+        MaxHealth = _startMaxHealth;
+        CurrentHealth = _startMaxHealth;
 
-        _currentHealth -= amount;
-
-        if (_currentHealth < 0)
-            _currentHealth = 0;
-
-        HealthChanged?.Invoke(_currentHealth);
+        LevelChanged?.Invoke(CurrentLevel);
+        HealthChanged?.Invoke(CurrentHealth);
     }
 
     public void IncreaseLevel(int amount = 1)
@@ -41,18 +40,21 @@ public class CharacterStats
         if (amount < 1)
             throw new ArgumentOutOfRangeException(nameof(amount) + " can't be less than 1");
 
-        _currentLevel += amount;
+        CurrentLevel += amount;
 
-        LevelChanged?.Invoke(_currentLevel);
+        LevelChanged?.Invoke(CurrentLevel);
     }
 
-    public void ResetStats()
+    public void DecreaseCurrentHealth(int amount)
     {
-        _currentLevel = 1;
-        _maxHealth = 30;
-        _currentHealth = _maxHealth;
+        if (amount < 0)
+            throw new ArgumentOutOfRangeException(nameof(amount) + " can't be less than 0");
 
-        LevelChanged?.Invoke(_currentLevel);
-        HealthChanged?.Invoke(_currentHealth);
+        CurrentHealth -= amount;
+
+        if (CurrentHealth < 0)
+            CurrentHealth = 0;
+
+        HealthChanged?.Invoke(CurrentHealth);
     }
 }

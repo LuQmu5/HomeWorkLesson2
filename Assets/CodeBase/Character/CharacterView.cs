@@ -1,9 +1,9 @@
 using System.Collections;
 using UnityEngine;
 
-[RequireComponent(typeof(Animator))]
 public class CharacterView : MonoBehaviour
 {
+    [SerializeField] private Animator _animator;
     [SerializeField] private GameObject _model;
 
     private const string IsGrounded = nameof(IsGrounded);
@@ -18,7 +18,6 @@ public class CharacterView : MonoBehaviour
     private const string IsMovement = nameof(IsMovement);
     private const string IsAirborne = nameof(IsAirborne);
 
-    private Animator _animator;
     private SkinnedMeshRenderer[] _renderers;
 
     private Coroutine _damagedAnimationCoroutine;
@@ -26,12 +25,9 @@ public class CharacterView : MonoBehaviour
     private Color _damagedColor = Color.red;
 
     public GameObject Model => _model;
+    public Coroutine KnockingBackCoroutine { get; private set; }
 
-    public void Initialize()
-    {
-        _animator = GetComponent<Animator>();
-        _renderers = transform.GetComponentsInChildren<SkinnedMeshRenderer>();
-    }
+    private void Start() => _renderers = transform.GetComponentsInChildren<SkinnedMeshRenderer>();
 
     public void PlayDamagedAnimation()
     {
@@ -39,6 +35,14 @@ public class CharacterView : MonoBehaviour
             StopCoroutine(_damagedAnimationCoroutine);
 
         _damagedAnimationCoroutine = StartCoroutine(DamagedAnimationPlaying());
+    }
+
+    public void PlayKnockingBackAnimation(Vector3 from)
+    {
+        if (KnockingBackCoroutine != null)
+            StopCoroutine(KnockingBackCoroutine);
+
+        KnockingBackCoroutine = StartCoroutine(KnocningBack(from));
     }
 
     public void StartIdling() => _animator.SetBool(IsIdling, true);
@@ -88,5 +92,27 @@ public class CharacterView : MonoBehaviour
         }
 
         _damagedAnimationCoroutine = null;
+    }
+
+    private IEnumerator KnocningBack(Vector3 from)
+    {
+        int directionX = transform.position.x < from.x ? -1 : 1;
+        Vector3 firstPoint = transform.position + new Vector3(directionX * 2.2f, 0);
+        Vector3 secondPoint = transform.position + new Vector3(directionX * 1.7f, 2);
+        Vector3 thirdPoint = transform.position + new Vector3(directionX * 1.2f, 3);
+        Vector3 fourthPoint = transform.position;
+        float time = 1; // 0 - 1
+        float speed = 2;
+
+        while (time > 0)
+        {
+            transform.position = Bezier.GetPoint(firstPoint, secondPoint, thirdPoint, fourthPoint, time);
+
+            time -= Time.deltaTime * speed;
+
+            yield return null;
+        }
+
+        KnockingBackCoroutine = null;
     }
 }

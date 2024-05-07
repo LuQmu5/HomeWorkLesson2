@@ -1,8 +1,9 @@
 using System;
+using System.Collections;
 using UnityEngine;
 
 [RequireComponent(typeof(CharacterController))]
-public class Character : MonoBehaviour, ICoroutineRunner
+public class Character : MonoBehaviour, ICoroutineRunner, ILevelable, IDamagable, IKnockbackable
 {
     [SerializeField] private CharacterView _view;
     [SerializeField] private GroundChecker _groundChecker;
@@ -10,10 +11,8 @@ public class Character : MonoBehaviour, ICoroutineRunner
     private CharacterConfig _config;
     private PlayerInput _input;
     private CharacterStateMachine _stateMachine;
-    private CharacterStats _stats;
     private CharacterController _controller;
-
-    public Vector3 LastDamageSourcePosition { get; private set; }
+    private CharacterStats _stats;
 
     public PlayerInput Input => _input;
     public CharacterController Controller => _controller;
@@ -21,14 +20,22 @@ public class Character : MonoBehaviour, ICoroutineRunner
     public CharacterView View => _view;
     public GroundChecker GroundChecker => _groundChecker;
 
+    public int CurrentLevel => _stats.CurrentLevel;
+    public int MaxHealth => _stats.MaxHealth;
+    public int CurrentHealth => _stats.CurrentHealth;
+    public Coroutine KnockingBackCoroutine => _view.KnockingBackCoroutine;
+
+    public event Action Damaged;
+    public event Action Died;
+
     public void Init(CharacterConfig config, CharacterStats stats)
     {
         _controller = GetComponent<CharacterController>();
 
         _config = config;
-        _input = new PlayerInput();
         _stats = stats;
-        _view.Initialize();
+
+        _input = new PlayerInput();
         _stateMachine = new CharacterStateMachine(this);
     }
 
@@ -38,31 +45,26 @@ public class Character : MonoBehaviour, ICoroutineRunner
         _stateMachine.HandleInput();
     }
 
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.TryGetComponent(out Spikes spikes))
-        {
-            LastDamageSourcePosition = spikes.transform.position;
-            _stats.ApplyDamage(spikes.Damage);
-            _stateMachine.SwitchState<DamagedState>();
-        }
-
-        if (other.TryGetComponent(out LevelUpper levelUpper))
-        {
-            levelUpper.gameObject.SetActive(false);
-            _stats.IncreaseLevel();
-        }
-    }
-
     private void OnEnable() => _input.Enable();
 
     private void OnDisable() => _input.Disable();
 
-    public void WarpTo(Vector3 position)
+    public void IncreaseLevel(int amount = 1)
     {
-        _stateMachine.SwitchState<IdlingState>();
-        _controller.enabled = false;
-        transform.position = position;
-        _controller.enabled = true;
+        _stats.IncreaseLevel(amount);
+    }
+
+    public void ApplyDamage(int amount)
+    {
+        _stats.DecreaseCurrentHealth(amount);
+        Damaged?.Invoke();
+
+        if (_stats.CurrentHealth == 0)
+            Died?.Invoke();
+    }
+
+    public void Knockback(Vector3 from)
+    {
+        _view.PlayKnockingBackAnimation(from);
     }
 }

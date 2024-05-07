@@ -2,10 +2,10 @@ using UnityEngine.InputSystem;
 
 public class GroundedState : MovementState
 {
-    private readonly GroundChecker _groundChecker;
-
     public GroundedState(IStateSwitcher stateSwitcher, StateMachineData data, Character character) : base(stateSwitcher, data, character)
-        => _groundChecker = character.GroundChecker;
+    {
+
+    }
 
     public override void Enter()
     {
@@ -25,7 +25,7 @@ public class GroundedState : MovementState
     {
         base.Update();
 
-        if (_groundChecker.OnGround)
+        if (Character.GroundChecker.OnGround)
             return;
 
         StateSwitcher.SwitchState<FallingState>();

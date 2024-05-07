@@ -1,36 +1,24 @@
-﻿public class SprintingState : GroundedState
+﻿public class SprintingState : BaseRunState
 {
-    private readonly GroundedStateConfig _config;
-
     public SprintingState(IStateSwitcher stateSwitcher, StateMachineData data, Character character) : base(stateSwitcher, data, character)
-        => _config = character.Config.GroundedStateConfig;
+    {
+    }
 
     public override void Enter()
     {
         base.Enter();
 
-        Data.Speed = _config.SprintStateConfig.SprintSpeed;
-
-        View.StartSprinting();
-    }
-
-    public override void Exit()
-    {
-        base.Exit();
-
-        View.StopSprinting();
+        Data.Speed = Character.Config.GroundedStateConfig.SprintSpeed;
     }
 
     public override void Update()
     {
         base.Update();
 
-        if (IsHorizontalInputZero())
-            StateSwitcher.SwitchState<IdlingState>();
+        if (IsShiftDown == false)
+            StateSwitcher.SwitchState<NormalRunningState>();
 
-        if (IsShiftDown)
-            return;
-
-        StateSwitcher.SwitchState<RunningState>();
+        if (IsAltDown)
+            StateSwitcher.SwitchState<WalkingState>();
     }
 }

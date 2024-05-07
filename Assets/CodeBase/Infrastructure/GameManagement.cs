@@ -43,7 +43,6 @@ public class GameManagement
         Debug.Log("restart");
         Time.timeScale = 1;
         _characterStats.ResetStats();
-        _character.WarpTo(_characterStartPosition);
 
         foreach (GameObject obj in _resetableObjects)
         {

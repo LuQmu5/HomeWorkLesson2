@@ -1,9 +1,9 @@
 public class FallingState : AirborneState
 {
-    private readonly GroundChecker _groundChecker;
-
     public FallingState(IStateSwitcher stateSwitcher, StateMachineData data, Character character) : base(stateSwitcher, data, character)
-        => _groundChecker = character.GroundChecker;
+    {
+
+    }
 
     public override void Enter()
     {
@@ -23,14 +23,14 @@ public class FallingState : AirborneState
     {
         base.Update();
 
-        if (_groundChecker.OnGround)
+        if (Character.GroundChecker.OnGround)
         {
             Data.YVelocity = 0;
 
             if (IsHorizontalInputZero())
                 StateSwitcher.SwitchState<IdlingState>();
             else
-                StateSwitcher.SwitchState<RunningState>();
+                StateSwitcher.SwitchState<BaseRunState>();
         }
     }
 }
