@@ -24,10 +24,31 @@ public class CharacterView : MonoBehaviour
     private Color _normalColor = Color.white;
     private Color _damagedColor = Color.red;
 
-    public GameObject Model => _model;
     public Coroutine KnockingBackCoroutine { get; private set; }
 
     private void Start() => _renderers = transform.GetComponentsInChildren<SkinnedMeshRenderer>();
+
+    public void Show()
+    {
+        _model.gameObject.SetActive(true);
+    }
+
+    public void Hide()
+    {
+        if (KnockingBackCoroutine != null)
+            StopCoroutine(KnockingBackCoroutine);
+
+        if (_damagedAnimationCoroutine != null)
+            StopCoroutine(_damagedAnimationCoroutine);
+
+        KnockingBackCoroutine = null;
+        _damagedAnimationCoroutine = null;
+
+        foreach (var renderer in _renderers)
+            renderer.materials[0].color = _normalColor;
+
+        _model.gameObject.SetActive(false);
+    }
 
     public void PlayDamagedAnimation()
     {

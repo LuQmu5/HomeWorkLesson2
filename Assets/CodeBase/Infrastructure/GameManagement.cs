@@ -1,20 +1,21 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using UnityEngine;
 
 public class GameManagement
 {
-    private CharacterStats _characterStats;
-    private Character _character;
-    private IEnumerable _resetableObjects;
+    private readonly CharacterStats _characterStats;
+    private readonly Character _character;
+    private readonly IReadOnlyCollection<RefreshableObject> _refreshableObjects;
+    private readonly Vector3 _characterStartPosition;
 
-    private Vector3 _characterStartPosition;
-
-    public GameManagement(CharacterStats characterStats, Character character, IEnumerable resetableObjects)
+    public GameManagement(CharacterStats characterStats, Character character, IReadOnlyCollection<RefreshableObject> refreshableObjects)
     {
         _characterStats = characterStats;
         _character = character;
         _characterStartPosition = character.transform.position;
-        _resetableObjects = resetableObjects;
+        _refreshableObjects = refreshableObjects;
     }
 
     public void PauseGame()
@@ -24,12 +25,12 @@ public class GameManagement
 
     public void ShowCharacterView()
     {
-        _character.View.Model.SetActive(true);
+        _character.View.Show();
     }
 
     public void HideCharacterView()
     {
-        _character.View.Model.SetActive(false);
+        _character.View.Hide();
     }
 
     public void ExitGame()
@@ -44,9 +45,9 @@ public class GameManagement
         Time.timeScale = 1;
         _characterStats.ResetStats();
 
-        foreach (GameObject obj in _resetableObjects)
-        {
-            obj.SetActive(true);
-        }
+        foreach (var obj in _refreshableObjects)
+            obj.Refresh();
+
+        _character.WarpTo(_characterStartPosition);
     }
 }

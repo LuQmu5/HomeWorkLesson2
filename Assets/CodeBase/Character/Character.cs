@@ -67,4 +67,13 @@ public class Character : MonoBehaviour, ICoroutineRunner, ILevelable, IDamagable
     {
         _view.PlayKnockingBackAnimation(from);
     }
+
+    public void WarpTo(Vector3 position)
+    {
+        _controller.enabled = false;
+
+        transform.position = position;
+
+        _controller.enabled = true;
+    }
 }

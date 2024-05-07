@@ -14,11 +14,13 @@
     public virtual void Enter()
     {
         Character.Damaged += OnCharacterDamaged;
+        Character.Died += OnCharacterDied;
     }
 
     public virtual void Exit()
     {
         Character.Damaged -= OnCharacterDamaged;
+        Character.Died -= OnCharacterDied;
     }
 
     public virtual void HandleInput()
@@ -34,5 +36,10 @@
     private void OnCharacterDamaged()
     {
         StateSwitcher.SwitchState<DamagedState>();
+    }
+
+    private void OnCharacterDied()
+    {
+        StateSwitcher.SwitchState<IdlingState>();
     }
 }

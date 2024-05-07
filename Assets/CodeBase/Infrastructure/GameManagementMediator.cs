@@ -3,35 +3,34 @@
 public class GameManagementMediator : IDisposable
 {
     private GameOverPanel _gameOverPanel;
-    private CharacterStats _characterStats;
+    private Character _character;
     private GameManagement _gameManagement;
 
-    public GameManagementMediator(GameOverPanel gameOverPanel, CharacterStats characterStats, GameManagement gameManagement)
+    public GameManagementMediator(GameOverPanel gameOverPanel, Character character, GameManagement gameManagement)
     {
         _gameOverPanel = gameOverPanel;
-        _characterStats = characterStats;
+        _character = character;
         _gameManagement = gameManagement;
 
         _gameOverPanel.RestartButtonClicked += OnRestartButtonClicked;
         _gameOverPanel.ExitButtonClicked += OnExitButtonClicked;
-        _characterStats.HealthChanged += OnCharacterHealthChanged;
+
+        _character.Died += OnCharacterDied;
     }
 
     public void Dispose()
     {
         _gameOverPanel.RestartButtonClicked -= OnRestartButtonClicked;
         _gameOverPanel.ExitButtonClicked -= OnExitButtonClicked;
-        _characterStats.HealthChanged -= OnCharacterHealthChanged;
+
+        _character.Died -= OnCharacterDied;
     }
 
-    private void OnCharacterHealthChanged(int newValue)
+    private void OnCharacterDied()
     {
-        if (newValue == 0)
-        {
-            _gameOverPanel.Show();
-            _gameManagement.PauseGame();
-            _gameManagement.HideCharacterView();
-        }
+        _gameOverPanel.Show();
+        _gameManagement.PauseGame();
+        _gameManagement.HideCharacterView();
     }
 
     private void OnExitButtonClicked()
